@@ -1,5 +1,6 @@
 class PostsController < ApplicationController
   before_action :set_post, only: [:show, :edit, :update, :destroy]
+  before_action :auth
 
   # GET /posts
   # GET /posts.json
@@ -61,6 +62,12 @@ class PostsController < ApplicationController
     end
   end
 
+  # GET /posts/logout
+  def logout
+    reset_session
+    redirect_to tex2e_path
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_post
@@ -70,5 +77,16 @@ class PostsController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def post_params
       params.require(:post).permit(:date, :title, :tag, :text, :publish)
+    end
+
+    def auth
+      authenticate_or_request_with_http_basic("posts") do |name, password|
+        user_to_login = Admin.find_by_name(name)
+        if user_to_login
+          user_to_login.authoricate(name, password)
+        else
+          false
+        end
+      end
     end
 end
