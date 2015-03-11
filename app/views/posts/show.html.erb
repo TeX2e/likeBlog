@@ -21,6 +21,11 @@
 </p>
 
 <p>
+  <strong>HTML Text:</strong>
+  <%= @post.html_text.html_safe if @post.html_text %>
+</p>
+
+<p>
   <strong>Publish:</strong>
   <%= @post.publish %>
 </p>

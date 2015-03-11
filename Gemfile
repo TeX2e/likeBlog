@@ -43,3 +43,8 @@ group :development, :test do
   gem 'spring'
 end
 
+# convert markdown to html
+gem 'kramdown'
+
+
+

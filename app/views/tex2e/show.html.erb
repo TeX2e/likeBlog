@@ -1,11 +1,9 @@
-<p>
-  <strong>Title:</strong>
+<div class="title">
   <%= @post.title %>
-</p>
+</div>
 
-<p>
-  <strong>Text:</strong>
-  <%= @post.text %>
-</p>
+<div class="html_text">
+  <%= @post.html_text.html_safe if @post.html_text %>
+</div>
 
 <%= link_to 'Back', tex2e_path %>

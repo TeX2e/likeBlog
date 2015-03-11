@@ -11,11 +11,11 @@
   </thead>
 
   <tbody>
-    <% @posts.each.with_index do |post, index| %>
+    <% @posts.each do |post| %>
       <tr>
         <td><%= post.title %></td>
         <td><%= post.text %></td>
-        <td><%= link_to '続きを読む', show_tex2e_path(index + 1) %></td>
+        <td><%= link_to '続きを読む', show_tex2e_path(post) %></td>
       </tr>
     <% end %>
   </tbody>
