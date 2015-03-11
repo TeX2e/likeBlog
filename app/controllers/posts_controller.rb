@@ -62,12 +62,6 @@ class PostsController < ApplicationController
     end
   end
 
-  # GET /posts/logout
-  def logout
-    reset_session
-    redirect_to tex2e_path
-  end
-
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_post

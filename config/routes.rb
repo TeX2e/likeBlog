@@ -1,6 +1,5 @@
 Rails.application.routes.draw do
   resources :posts, id: /\d+/
-  get 'posts/logout' => 'posts#logout', as: 'logout_posts' # not work
 
   get 'tex2e' => 'tex2e#index', as: 'tex2e'
   get 'tex2e/:id' => 'tex2e#show', as: 'show_tex2e', id: /\d+/
