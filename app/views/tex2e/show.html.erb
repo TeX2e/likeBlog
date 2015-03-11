@@ -1,8 +1,14 @@
-<div class="title">
-  <%= @post.title %>
+<div class="date">
+  <%= @post.date.strftime("%Y年%m月%d日") %>
 </div>
 
-<div class="html_text">
+<div class="title">
+  <h1><%= @post.title %></h1>
+</div>
+
+<hr>
+
+<div class="markdown-body">
   <%= @post.html_text.html_safe if @post.html_text %>
 </div>
 

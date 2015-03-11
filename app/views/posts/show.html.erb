@@ -20,10 +20,10 @@
   <%= @post.text %>
 </p>
 
-<p>
-  <strong>HTML Text:</strong>
+<p><strong>HTML Text:</strong></p>
+<div class="markdown-body">
   <%= @post.html_text.html_safe if @post.html_text %>
-</p>
+</div>
 
 <p>
   <strong>Publish:</strong>
