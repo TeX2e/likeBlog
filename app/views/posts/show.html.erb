@@ -21,9 +21,13 @@
 </p>
 
 <p><strong>HTML Text:</strong></p>
+<hr>
 <div class="markdown-body">
-  <%= @post.html_text.html_safe if @post.html_text %>
+  <div class="codehilite">
+    <%= @post.html_text.html_safe if @post.html_text %>
+  </div>
 </div>
+<hr>
 
 <p>
   <strong>Publish:</strong>
