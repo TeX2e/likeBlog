@@ -9,7 +9,9 @@
 <hr>
 
 <div class="markdown-body">
-  <%= @post.html_text.html_safe if @post.html_text %>
+  <div class="codehilite">
+    <%= @post.html_text.html_safe if @post.html_text %>
+  </div>
 </div>
 
 <%= link_to 'Back', tex2e_path %>

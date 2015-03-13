@@ -195,11 +195,8 @@ input,select,textarea,button {
 }
 
 
-
-
-
-
-
+/* little fix
+  ------------------------------------ */
 
 
 
@@ -756,7 +753,7 @@ pre {
   	.namespace { color: #555555 } /* Name.Namespace */
   	.tag       { color: #000080 } /* Name.Tag */
   	.variable  { color: #008080 } /* Name.Variable */
-  	.operator  { color: #000000; font-weight: bold } /* Operator.Word */
+  	.operator  { color: #000000 } /* Operator.Word */
   	.number    { color: #009999 } /* Literal.Number */
   	.string    { color: #dd1144 } /* Literal.String */
   	.regex     { color: #009926 } /* Literal.String.Regex */
@@ -783,4 +780,53 @@ pre {
   }
 }
 
+
+
+
+/* code caption
+  --------------------------------*/
+
+.markdown-body p span.code-caption {
+  font: 12px Consolas, "Liberation Mono", Menlo, Courier, monospace;
+  background-color: rgba(245,245,245,1);
+  border: 1px solid #ddd;;
+  box-sizing: content-box;
+  padding-top: 0.4em;
+  padding-left: 2em;
+  padding-right: 2em;
+  padding-bottom: 0.35em;
+  border-top-left-radius: 100px;
+  border-top-right-radius: 100px;
+  position: relative;
+  left: 0.3em;
+  bottom: -1em;
+}
+
+/*
+.markdown-body p span.code-caption {
+    position:relative;
+    width:480px;
+    padding:1em 1.5em;
+    margin:2em auto;
+    color:#fff;
+    background: rgba(0,0,0,1);
+    overflow: hidden;
+}
+ 
+.markdown-body p span.code-caption:after {
+    content:"";
+    position:absolute;
+    top: 0;
+    right: 0;
+    border-width: 6px 16px 25px 0px; // This trick side-steps a webkit bug 
+    border-style: solid;
+    border-color: #fff #fff rgba(0,0,0,1) rgba(0,0,0,1); // A bit more verbose to work with .rounded too 
+    background: rgba(0,0,0,0.8); // For Opera when also applying a border-radius 
+    display:block; width:0; // Only for Firefox 3.0 damage limitation 
+    // Optional: shadow 
+    -webkit-box-shadow:0 1px 1px rgba(0,0,0,0.3), -1px 1px 1px rgba(0,0,0,0.2);
+    -moz-box-shadow:0 1px 1px rgba(0,0,0,0.3), -1px 1px 1px rgba(0,0,0,0.2);
+    box-shadow:0 1px 1px rgba(0,0,0,0.3), -1px 1px 1px rgba(0,0,0,0.2);
+}
+*/
 

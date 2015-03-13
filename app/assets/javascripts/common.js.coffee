@@ -1,29 +1,40 @@
 
-# window.onload = ->
-
-# markdown_pre_code = $('div.markdown-body pre > code')
-# markdown_pre_code.ready ->
+$(document).ready ->
+  $('.markdown-body p').each ->
+    code_deco = $(this).html()
+    code_deco = code_deco.replace(///
+      :caption{([^}]*)}\s*:type{([^}]*)}
+      ///, 
+      "<span class=\"code-caption\">$1</span>"
+    )
+    type = RegExp.$2
+    if type?
+      changed = false
+      $('.markdown-body pre code').each ->
+        if changed == true
+          return
+        class_name = $(this).prop("class")
+        if class_name == ""
+          $(this).prop("class", type)
+          changed = true
+          return
+    $(this).html(code_deco)
 
 $(document).ready ->
-  $('div.markdown-body pre > code').each ->
+  # highlight all pre>code 
+  $('div.markdown-body pre > code.ruby').each ->
     code = $(this).html()
-    # string
+    
+    ## tab -> space
+    code = code.replace(/\t/g, "  ")
+
+    ## keyword
     code = code.replace(///
+      ((?:\n|^)\s*)
       (
-        "(?:[^\\"]+|\\.)*"
-        |
-        '(?:[^\\']+|\\.)*'
-      )
-      ///g, 
-      ->
-        string = RegExp.$1
-        "<dvi class=\"string\">#{string}</dvi>"
-    )
-    # keyword
-    code = code.replace(///
-      \b( #capture
-        end|do
-        |if|elsif|unless
+        end
+        # |do|if|unless
+        |elsif|else
         |for|while|until
         # |def
         |class|module|public|protected
@@ -32,40 +43,114 @@ $(document).ready ->
         |attr_(?:writer|reader|accessor)
         |return|require
       )\b
-      ([^=])
+      |
+      (\s)
+      (
+        do|if|unless
+      )
+      (?=\s)
       ///g, 
       ->
-        "<dvi class=\"keyword\">#{RegExp.$1}#{RegExp.$2}</dvi>"
+        before  = RegExp.$1 || RegExp.$3 || ""
+        keyword = RegExp.$2 || RegExp.$4 || ""
+        "#{before}${keyword:::#{keyword}}"
     )
-    # def function
+
+    ## def function
     code = code.replace(///
-      \b
+      ((?:\n|^)\s*)
       def \s+
       ( 
-        \w[\w\d]+[?!=]?
-        |===?|>[>=]?|<=>|<[<=]?|[%&`/\|]|\*\*?|=?~|[-+]@?|\[\]=? # the method name
+        \w[\w\d]+[?!=]?  # the method name
+        |===?|>[>=]?|<=>|<[<=]?|[%&`/\|]|\*\*?|=?~|[-+]@?|\[\]=?  # syntactic sugar
       )
       (?:
         (\() # right paren
-        ([\w\d\s,*&]+)? # args
+        ((?:[\w\d\s,*]+|&amp;)+)? # args
         (\)) # left paren
       )?
-      ///gi, 
+      ///g, 
       ->
-        def_func = "<dvi class=\"keyword\">def</dvi> <dvi class=\"func\">#{RegExp.$1}</dvi>"
-        r_paren = RegExp.$2 || ""
-        args    = RegExp.$3 || ""
-        l_paren = RegExp.$4 || ""
-        args = "<dvi class=\"args\">#{args}</dvi>"
+        before    = RegExp.$1 || ""
+        func_name = RegExp.$2 || ""
+        def_func  = "#{before}${keyword:::def} ${func:::#{func_name}}"
+        r_paren   = RegExp.$3 || ""
+        args      = RegExp.$4 || ""
+        l_paren   = RegExp.$5 || ""
+        args = "${args:::#{args}}" unless args == ""
         return def_func + r_paren + args + l_paren
     )
-    # number
+    
+    ## regexp
+    # スラッシュ/は割り算の記号なのか判断する必要があるので、
+    #       / / -> 2つの演算子
+    #     = / / -> 正規表現
+    # のようにスラッシュの前のイコールの有無で判断しています
+    # その他に配列内の正規表現オブジェクトの見つけるため
+    #     [/regexp/, /regexp/]
+    #     str.replace(/regexp/, "match")
+    # のように [ と , と ( でも正規表現として認めます
     code = code.replace(///
-      ([^\w])
+      ([=(\[,]\s*) 
+      (
+        \/(?:[^\\/]+|\\.)*\/
+        [gimx]*
+      )
+      ///g, 
+      ->
+        before = RegExp.$1 || ""
+        regexp = RegExp.$2 || ""
+        regexp = regexp.replace(/\$\{keyword:::(if|do|unless)\}/g, "$1") # 変換されてしまったkeywordを戻す
+          .replace(/"/g, " __quote__ ") # 文字列と認識しないようにする
+          .replace(/:/g, " __colon__ ") # シンボルと認識しないようにする
+          .replace(/\}/g, " __brace__ ") # 中間言語の終了タグと認識しないようにする
+          .replace(/(\d)/g, " \\$1 ") # 数値と認識しないようにする
+          .replace(/(true|false|nil)/g, " \\$1 ") # booleanと認識しないようにする
+        "#{before}$r{regexp:::#{regexp}}r$"
+    )
+    
+    ## string
+    code = code.replace(///
+      ([^\\])
+      (
+        "(?:[^\\"\n]+|\\.)*"
+        |
+        '(?:[^\\'\n]+|\\.)*'
+      )
+      ///g, 
+      ->
+        before = RegExp.$1 || ""
+        string = RegExp.$2 || ""
+        string = string.replace(/\$\{keyword:::(if|do|unless)\}/g, "$1") # 変換されてしまったkeywordを戻す
+          .replace(/\//g, " __slash__ ") # 正規表現と認識しないようにする
+          .replace(/:/g, " __colon__ ") # シンボルと認識しないようにする
+          .replace(/\}/g, " __brace__ ") # 中間言語の終了タグと認識しないようにする
+          .replace(/(\d)/g, " \\$1 ") # 数値と認識しないようにする
+          .replace(/([-\+\*!%&()=^~|@`\[\];<>,.])/g, " \\$1 ") # 演算子と認識しないようにする
+          .replace(/(true|false|nil)/g, " \\$1 ") # booleanと認識しないようにする
+        "#{before}$s{string:::#{string}}s$"
+    )
+
+    ## symbol
+    code = code.replace(///
+      ([^:\\])
+      ( :[\w\d]+ | [\w\d]+: )
+      ([^:])
+      ///g, 
+      ->
+        before = RegExp.$1 || ""
+        symbol = RegExp.$2 || ""
+        after  = RegExp.$3 || ""
+        "#{before}${symbol:::#{symbol}}#{after}"
+    )
+
+    ## number
+    code = code.replace(///
+      ([^\w\\])
       (
         \d+(?:\.\d+)?  # match int (and float)
       )
-      ([^\w])
+      (?!\w)
       |
       (\d[\d_]+\d)  # include underscore
       ///g, 
@@ -74,43 +159,23 @@ $(document).ready ->
         if RegExp.$1?
           before = RegExp.$1 || ""
           number = RegExp.$2 || ""
-          after  = RegExp.$3 || ""
-          "#{before}<dvi class=\"number\">#{number}</dvi>#{after}"
+          "#{before}${number:::#{number}}"
         else
-          number = RegExp.$4 || ""
-          "<dvi class=\"number\">#{number}</dvi>"
+          number = RegExp.$3 || ""
+          "${number:::#{number}}"
     )
-    # symbol
+
+    ## boolean and null
     code = code.replace(///
-      ([^:])
-      ( :[\w\d]+ | [\w\d]+: )
-      ([^:])
+      ([^\\])(true|false|nil)\b
       ///g, 
       ->
-        symbol = RegExp.$2
-        "#{RegExp.$1}<dvi class=\"symbol\">#{symbol}</dvi>#{RegExp.$3}"
+        before = RegExp.$1 || ""
+        symbol = RegExp.$2 || ""
+        "#{before}${symbol:::#{symbol}}"
     )
-    # boolean and null
-    code = code.replace(///
-      \b(true|false|nil)\b
-      ///g, 
-      ->
-        symbol = RegExp.$1
-        "<dvi class=\"symbol\">#{symbol}</dvi>"
-    )
-    # regexp
-    code = code.replace(///
-      ([^<])
-      (
-        \/(?:[^\\/<]+|\\.|<[^/])*\/
-        [gimx]*
-      )
-      ///g, 
-      ->
-        regexp = RegExp.$2
-        "#{RegExp.$1}<dvi class=\"regexp\">#{regexp}</dvi>"
-    )
-    # operator
+    
+    ## operator
     code = code.replace(///
       (\s)
       (
@@ -129,20 +194,64 @@ $(document).ready ->
       (\s)
       ///g, 
       ->
-        operator = RegExp.$2
-        "#{RegExp.$1}<dvi class=\"operator\">#{operator}</dvi>#{RegExp.$3}"
+        before   = RegExp.$1 || ""
+        operator = RegExp.$2 || ""
+        after    = RegExp.$3 || ""
+        "#{before}${operator:::#{operator}}#{after}"
     )
-    # escape sequence
+
+    # # escape sequence
+    # code = code.replace(///
+    #   (\\.)
+    #   ///g, 
+    #   ->
+    #     escape = RegExp.$1 || ""
+    #     "${escape-sequence:::#{escape}}}"
+    # )
+
+    ## replace ${xxx:::content} -> <div class="xxx">content</div>
     code = code.replace(///
-      (\\.)
+      \$\{   #  { で囲まれた中間言語  # 普通
+        ([^:]+):::([^}]+)
+      \}
+      |
+      \$s\{  # s{ で囲まれた中間言語  # 文字列オブジェクト
+        ([^:]+):::((?:[^}]+|\}r\$)+)
+      \}s\$
+      |
+      \$r\{  # r{ で囲まれた中間言語  # 正規表現オブジェクト
+        ([^:]+):::((?:[^}]+|\}s\$)+)
+      \}r\$
       ///g, 
       ->
-        escape = RegExp.$1
-        "<dvi class=\"escape-sequence\">#{escape}</dvi>"
+        class_name = RegExp.$1 || RegExp.$3 || RegExp.$5 || ""
+        content    = RegExp.$2 || RegExp.$4 || RegExp.$6 || ""
+        "<dvi class=\"#{class_name}\">#{content}</dvi>"
     )
+    code = code.replace(/\ __slash__\ /g,"/")
+      .replace(/\ __quote__\ /g,"\"")
+      .replace(/\ __colon__\ /g,":")
+      .replace(/\ __brace__\ /g,"}")
+      .replace(/\ \\(\d)\ /g,"$1")
+      .replace(/\ \\([-\+\*!%&()=^~|@`\[\];<>,.])\ /g,"$1")
+      .replace(/\ \\(true|false|nil)\ /g,"$1")
 
     $(this).html(code) # replace hightlight code
     return
+  # end $('div.markdown-body pre > code').each
+# end $(document).ready
 
 
-  
+
+
+
+
+
+
+
+
+
+
+
+
+

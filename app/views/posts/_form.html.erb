@@ -1,3 +1,4 @@
+
 <div class="markdown-body">
   <%= form_for(@post) do |f| %>
     <% if @post.errors.any? %>
@@ -13,20 +14,20 @@
     <% end %>
 
     <div class="field">
-      <%= f.label :date %><br>
+      <%= f.label :date %>
       <%= f.date_select :date %>
     </div>
     <div class="field">
-      <%= f.label :title %><br>
+      <%= f.label :title %>
       <%= f.text_field :title %>
     </div>
     <div class="field">
-      <%= f.label :tag %><br>
+      <%= f.label :tag %>
       <%= f.text_field :tag %>
     </div>
     <div class="field">
       <%= f.label :text %><br>
-      <%= f.text_area :text, cols: 60, rows: 8 %>
+      <%= f.text_area :text, {:class => "auto-rows", cols: 100, rows: 20} %>
     </div>
     <div class="field">
       <label><%= f.check_box :publish %>公開</label><br>
@@ -36,3 +37,32 @@
     </div>
   <% end %>
 </div>
+
+<script type="text/javascript">
+$(function(){
+  function addStr(elm, str){
+    var elm  = $( "#" + elm ).get(0);　// $("#" + elm)[0]; でも可
+    var sPos = elm.selectionStart;
+    var ePos = elm.selectionEnd;
+    var addStr  = elm.value.substr(0, sPos) + str + elm.value.substr(ePos);
+    var cPos = sPos + str.length;
+    $(elm).val(addStr);
+    elm.setSelectionRange(cPos, cPos);          
+  }
+  $("textarea")
+  .focus(function(){
+    window.document.onkeydown = function(e){
+      if (e.keyCode === 9) {   // 9 = Tab
+        addStr(this.activeElement.id, "\t"); // \tを追加文字として引数に
+        e.preventDefault(); // デフォルト動作停止
+      }
+    }
+  })
+  .blur(function(){
+    window.document.onkeydown = function(e){
+      return true;
+    }
+  });
+});
+
+</script>
