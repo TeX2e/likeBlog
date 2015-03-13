@@ -47,6 +47,8 @@ end
 gem 'kramdown'
 # clean html tags
 gem 'sanitize'
+# ページの遷移時にjsを動かすためのgem
+gem 'jquery-turbolinks'
 
 
 

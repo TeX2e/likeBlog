@@ -4,7 +4,7 @@
 # markdown_pre_code = $('div.markdown-body pre > code')
 # markdown_pre_code.ready ->
 
-window.onload = ->
+$(document).ready ->
   $('div.markdown-body pre > code').each ->
     code = $(this).html()
     # string
@@ -17,7 +17,7 @@ window.onload = ->
       ///g, 
       ->
         string = RegExp.$1
-        return "<dvi class=\"string\">#{string}</dvi>"
+        "<dvi class=\"string\">#{string}</dvi>"
     )
     # keyword
     code = code.replace(///
@@ -26,13 +26,11 @@ window.onload = ->
         |if|elsif|unless
         |for|while|until
         # |def
-        |class|module
-        |public|protected
+        |class|module|public|protected
         |case|when
         |begin|rescue
         |attr_(?:writer|reader|accessor)
-        |return
-        |require
+        |return|require
       )\b
       ([^=])
       ///g, 
@@ -77,10 +75,10 @@ window.onload = ->
           before = RegExp.$1 || ""
           number = RegExp.$2 || ""
           after  = RegExp.$3 || ""
-          return "#{before}<dvi class=\"number\">#{number}</dvi>#{after}"
+          "#{before}<dvi class=\"number\">#{number}</dvi>#{after}"
         else
           number = RegExp.$4 || ""
-          return "<dvi class=\"number\">#{number}</dvi>"
+          "<dvi class=\"number\">#{number}</dvi>"
     )
     # symbol
     code = code.replace(///
@@ -90,7 +88,7 @@ window.onload = ->
       ///g, 
       ->
         symbol = RegExp.$2
-        return "#{RegExp.$1}<dvi class=\"symbol\">#{symbol}</dvi>#{RegExp.$3}"
+        "#{RegExp.$1}<dvi class=\"symbol\">#{symbol}</dvi>#{RegExp.$3}"
     )
     # boolean and null
     code = code.replace(///
@@ -98,7 +96,7 @@ window.onload = ->
       ///g, 
       ->
         symbol = RegExp.$1
-        return "<dvi class=\"symbol\">#{symbol}</dvi>"
+        "<dvi class=\"symbol\">#{symbol}</dvi>"
     )
     # regexp
     code = code.replace(///
@@ -110,7 +108,7 @@ window.onload = ->
       ///g, 
       ->
         regexp = RegExp.$2
-        return "#{RegExp.$1}<dvi class=\"regexp\">#{regexp}</dvi>"
+        "#{RegExp.$1}<dvi class=\"regexp\">#{regexp}</dvi>"
     )
     # operator
     code = code.replace(///
@@ -132,7 +130,7 @@ window.onload = ->
       ///g, 
       ->
         operator = RegExp.$2
-        return "#{RegExp.$1}<dvi class=\"operator\">#{operator}</dvi>#{RegExp.$3}"
+        "#{RegExp.$1}<dvi class=\"operator\">#{operator}</dvi>#{RegExp.$3}"
     )
     # escape sequence
     code = code.replace(///
@@ -140,16 +138,11 @@ window.onload = ->
       ///g, 
       ->
         escape = RegExp.$1
-        return "<dvi class=\"escape-sequence\">#{escape}</dvi>"
+        "<dvi class=\"escape-sequence\">#{escape}</dvi>"
     )
 
     $(this).html(code) # replace hightlight code
     return
 
-  ###
-  codes = document.getElementsByTagName('code');
-  for code in codes
-    code.innerHTML = "text"
-    console.log code
-  ###
+
   
