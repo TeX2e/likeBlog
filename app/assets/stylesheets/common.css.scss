@@ -195,11 +195,8 @@ input,select,textarea,button {
 }
 
 
-/* little fix
+/* def
   ------------------------------------ */
-
-
-
 
 
 
@@ -215,7 +212,9 @@ input,select,textarea,button {
 $color_scheme: bright;
 
 body {
-  min-width: 700px;
+  // min-width: 600px;
+  min-width: 600px;
+  max-width: 800px;
   padding: 1em;
   font: 13px/1.4 Helvetica, arial, freesans, clean, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol";
   color: #333;
@@ -662,7 +661,7 @@ pre {
     margin: 0;
     // font-size: 85%;
     font-size: 0.9em;
-    background-color: rgba(0,0,0,0.04);
+    background-color: rgba(240,240,240,1);
     border-radius: 3px;
   }
   code:before, code:after,
@@ -681,11 +680,15 @@ pre {
   pre > code {
     padding: 0;
     margin: 0;
-    // font-size: 100%;
+    // font-size: 90%;
     word-break: normal;
     white-space: pre;
     background: transparent;
     border: 0;
+  }
+
+  p > code {
+    font-size: 90%;
   }
 
   .highlight {
@@ -765,7 +768,9 @@ pre {
     // background: #ffffff;
     .comment   { color: #999988; font-style: italic }        /* Comment */
     .error     { color: #a61717; background-color: #e3d2d2 } /* Error */
-    .keyword   { color: #f70048; }//font-weight: bold }         /* Keyword */
+    .keyword   { color: rgba(240,0,70,1) }//font-weight: bold }      /* Keyword */
+    .type      { color: rgba(90,220,250,1) } // sky blue
+    .func-c    { color: rgba(90,220,250,1) } // when you use function on c-language
     .func      { color: rgba(150,232,0,1) } /* Name.Function */
     .args      { color: rgba(253,140,0,1) } /* Name.Arguments */
     .namespace { color: #555555 } /* Name.Namespace */
@@ -782,51 +787,26 @@ pre {
 
 
 
-
-/* code caption
-  --------------------------------*/
-
-.markdown-body p span.code-caption {
+// code caption
+.markdown-body p span {
+  color: rgba(0,0,0,1);
+  background-color: rgba(240,240,240,1);
   font: 12px Consolas, "Liberation Mono", Menlo, Courier, monospace;
-  background-color: rgba(245,245,245,1);
-  border: 1px solid #ddd;;
+  // border: 1px solid #ddd;
   box-sizing: content-box;
-  padding-top: 0.4em;
-  padding-left: 2em;
-  padding-right: 2em;
-  padding-bottom: 0.35em;
-  border-top-left-radius: 100px;
-  border-top-right-radius: 100px;
+  padding: 0.3em 2em 0.3em;
+  border-radius: 3px;
   position: relative;
-  left: 0.3em;
-  bottom: -1em;
+  left: 0em;
+  bottom: -0.6em;
+
 }
 
-/*
-.markdown-body p span.code-caption {
-    position:relative;
-    width:480px;
-    padding:1em 1.5em;
-    margin:2em auto;
-    color:#fff;
-    background: rgba(0,0,0,1);
-    overflow: hidden;
+// code background-color (default)
+.markdown-body pre {
+  color: rgba(0,0,0,1);
+  background-color: rgba(240,240,240,1);
 }
- 
-.markdown-body p span.code-caption:after {
-    content:"";
-    position:absolute;
-    top: 0;
-    right: 0;
-    border-width: 6px 16px 25px 0px; // This trick side-steps a webkit bug 
-    border-style: solid;
-    border-color: #fff #fff rgba(0,0,0,1) rgba(0,0,0,1); // A bit more verbose to work with .rounded too 
-    background: rgba(0,0,0,0.8); // For Opera when also applying a border-radius 
-    display:block; width:0; // Only for Firefox 3.0 damage limitation 
-    // Optional: shadow 
-    -webkit-box-shadow:0 1px 1px rgba(0,0,0,0.3), -1px 1px 1px rgba(0,0,0,0.2);
-    -moz-box-shadow:0 1px 1px rgba(0,0,0,0.3), -1px 1px 1px rgba(0,0,0,0.2);
-    box-shadow:0 1px 1px rgba(0,0,0,0.3), -1px 1px 1px rgba(0,0,0,0.2);
-}
-*/
+
+
 

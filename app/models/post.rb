@@ -17,6 +17,7 @@ class Post < ActiveRecord::Base
   def before_create
     # self.text = ERB::Util.html_escape(self.text).gsub(/^&gt;/, ">")
     # gem install sanitize
+    self.text.gsub!(/(#include\s*)<([\w.]+)>/, '\1&lt;\2&gt;')
   	self.text = Sanitize.clean(self.text)
     self.text.gsub!(/&gt;/, ">")
     self.text.gsub!(/&lt;/, "<")
