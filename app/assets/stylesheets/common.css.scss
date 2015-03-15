@@ -767,21 +767,28 @@ pre {
   .codehilite {
     // background: #ffffff;
     .comment   { color: #999988; font-style: italic }        /* Comment */
-    .error     { color: #a61717; background-color: #e3d2d2 } /* Error */
-    .keyword   { color: rgba(240,0,70,1) }//font-weight: bold }      /* Keyword */
-    .type      { color: rgba(90,220,250,1) } // sky blue
-    .func-c    { color: rgba(90,220,250,1) } // when you use function on c-language
-    .func      { color: rgba(150,232,0,1) } /* Name.Function */
-    .args      { color: rgba(253,140,0,1) } /* Name.Arguments */
-    .namespace { color: #555555 } /* Name.Namespace */
-    .tag       { color: #000080 } /* Name.Tag */
-    .variable  { color: #008080 } /* Name.Variable */
-    .operator  { color: rgba(247,0,84,1) } /* Operator.Word */
-    .number    { color: rgba(157,100,255,1) } /* Literal.Number */
-    .string    { color: rgba(220,220,100,1) } /* Literal.String */
-    .regexp    { color: rgba(244,156,0,1) } /* Literal.String.Regex */
-    .symbol    { color: rgba(157,100,255,1) } /* Literal.String.Symbol */
-    .escape-sequence { color: rgba(157,100,255,1) } /* Escape Sequence */
+    //.error     { color: #a61717; background-color: #e3d2d2 } /* Error */
+    //.keyword   { color: rgba(240,0,70,1) }//font-weight: bold }      /* Keyword */
+    //.type      { color: rgba(90,220,250,1) } // sky blue
+    //.func-c    { color: rgba(90,220,250,1) } // when you use function on c-language
+    //.func      { color: rgba(150,232,0,1) } /* Name.Function */
+    //.args      { color: rgba(253,140,0,1) } /* Name.Arguments */
+    //.namespace { color: #555555 } /* Name.Namespace */
+    //.tag       { color: #000080 } /* Name.Tag */
+    //.variable  { color: #008080 } /* Name.Variable */
+    //.operator  { color: rgba(247,0,84,1) } /* Operator.Word */
+    //.number    { color: rgba(165,115,255,1) } /* Literal.Number */
+    //.string    { color: rgba(220,220,100,1) } /* Literal.String */
+    //.regexp    { color: rgba(244,156,0,1) } /* Literal.String.Regex */
+    //.symbol    { color: rgba(157,100,255,1) } /* Literal.String.Symbol */
+    //.escape-sequence { color: rgba(165,115,255,1) } /* Escape Sequence */
+
+    .red      { color: rgba(240,0,70,1) }
+    .sky-blue { color: rgba(90,220,250,1) }
+    .purple   { color: rgba(165,115,255,1) }
+    .green    { color: rgba(150,232,0,1) }
+    .yellow   { color: rgba(220,220,100,1) }
+    .orange   { color: rgba(244,156,0,1) }
   }
 }
 

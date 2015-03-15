@@ -46,7 +46,7 @@ end
 # convert markdown to html
 gem 'kramdown'
 # clean html tags
-gem 'sanitize'
+# gem 'sanitize'
 # ページの遷移時にjsを動かすためのgem
 gem 'jquery-turbolinks'
 

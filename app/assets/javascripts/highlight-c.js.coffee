@@ -17,7 +17,7 @@ $(document).ready ->
       ///g, 
       ->
         keyword = RegExp.$1 || ""
-        "${keyword:::#{keyword}}"
+        "${red:::#{keyword}}"
     )
 
     ## def struct
@@ -27,7 +27,7 @@ $(document).ready ->
       ///g, 
       ->
         strucn_name = RegExp.$1 || ""
-        "#${keyword:::define} ${func:::#{strucn_name}}"
+        "#${red:::define} ${green:::#{strucn_name}}"
     )
 
     ## def function
@@ -39,7 +39,7 @@ $(document).ready ->
       ->
         before    = RegExp.$1 || ""
         func_name = RegExp.$2 || ""
-        "#{before} ${func:::#{func_name}}"
+        "#{before} ${green:::#{func_name}}"
     )
 
     ## init val
@@ -50,7 +50,7 @@ $(document).ready ->
       ///g, 
       ->
         type = RegExp.$1 || ""
-        "${type:::#{type}}"
+        "${sky-blue:::#{type}}"
     )
 
     ## use function
@@ -61,7 +61,7 @@ $(document).ready ->
       ->
         before = RegExp.$1 || ""
         func   = RegExp.$2 || ""
-        "#{before}${type:::#{func}}("
+        "#{before}${sky-blue:::#{func}}("
     )
 
     ## string
@@ -85,7 +85,7 @@ $(document).ready ->
           .replace(/(\d)/g, " \\$1 ") # 数値と認識しないようにする
           .replace(/([-\+\*!%&()=^~|@`\[\];<>,.])/g, " \\$1 ") # 演算子と認識しないようにする
           .replace(/(TRUE|FALSE|NULL|EOF)/g, " \\$1 ") # booleanと認識しないようにする
-        "#{before}$s{string:::#{string}}s$"
+        "#{before}$s{yellow:::#{string}}s$"
     )
 
     ## number
@@ -101,10 +101,10 @@ $(document).ready ->
         if RegExp.$1?
           before = RegExp.$1 || ""
           number = RegExp.$2 || ""
-          "#{before}${number:::#{number}}"
+          "#{before}${purple:::#{number}}"
         else
           number = RegExp.$3 || ""
-          "${number:::#{number}}"
+          "${purple:::#{number}}"
     )
 
     ## boolean and null
@@ -114,10 +114,11 @@ $(document).ready ->
       ->
         before = RegExp.$1 || ""
         symbol = RegExp.$2 || ""
-        "#{before}${symbol:::#{symbol}}"
+        "#{before}${purple:::#{symbol}}"
     )
 
-    ## replace ${xxx:::content} -> <div class="xxx">content</div>
+    ## 中間言語をhtmlタグに変換する
+    ## convert ${xxx:::content} -> <div class="xxx">content</div>
     code = code.replace(///
       \$\{   #  { で囲まれた中間言語  # 普通
         ([^:]+):::([^}]+)
@@ -133,7 +134,7 @@ $(document).ready ->
         "<dvi class=\"#{class_name}\">#{content}</dvi>"
     )
 
-    # stringのときにエスケープした記号を元に戻す
+    ## stringのときにエスケープした記号を元に戻す
     code = code.replace(/\ __slash__\ /g,"/")
       .replace(/\ __quote__\ /g,"\"")
       .replace(/\ __colon__\ /g,":")
@@ -142,7 +143,26 @@ $(document).ready ->
       .replace(/\ \\([-\+\*!%&()=^~|@`\[\];<>,.])\ /g,"$1")
       .replace(/\ \\(TRUE|FALSE|NULL|EOF)\ /g,"$1")
 
-    # comment
+    ## --- 以下は中間言語ではない --- ##
+
+    ## escape sequence
+    code = code.replace(///
+      ( 
+        \\. # escape-sequence in string
+        | # or
+        %   # format
+        -?  # flag
+        [\d.]* # digit
+        l?  # long
+        [csduoxfeg] # format
+      )
+      ///g,
+      ->
+        escape_sequence = RegExp.$1 || ""
+        "<dvi class=\"purple\">#{escape_sequence}</dvi>"
+    )
+
+    ## comment
     code = code.replace(///
       (\/\/[^\n]*)
       ///g,

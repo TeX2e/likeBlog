@@ -26,7 +26,7 @@ $(document).ready ->
       ->
         before  = RegExp.$1 || RegExp.$3 || ""
         keyword = RegExp.$2 || RegExp.$4 || ""
-        "#{before}${keyword:::#{keyword}}"
+        "#{before}${red:::#{keyword}}"
     )
 
     ## def function
@@ -45,11 +45,11 @@ $(document).ready ->
       ->
         before    = RegExp.$1 || ""
         func_name = RegExp.$2 || ""
-        def_func  = "#{before}${keyword:::def} ${func:::#{func_name}}"
+        def_func  = "#{before}${red:::def} ${green:::#{func_name}}"
         r_paren   = RegExp.$3 || ""
         args      = RegExp.$4 || ""
         l_paren   = RegExp.$5 || ""
-        args = "${args:::#{args}}" unless args == ""
+        args = "${orange:::#{args}}" unless args == ""
         return def_func + r_paren + args + l_paren
     )
     
@@ -78,7 +78,7 @@ $(document).ready ->
           .replace(/\}/g, " __brace__ ") # 中間言語の終了タグと認識しないようにする
           .replace(/(\d)/g, " \\$1 ") # 数値と認識しないようにする
           .replace(/(true|false|nil)/g, " \\$1 ") # booleanと認識しないようにする
-        "#{before}$r{regexp:::#{regexp}}r$"
+        "#{before}$r{orange:::#{regexp}}r$"
     )
     
     ## string
@@ -100,7 +100,7 @@ $(document).ready ->
           .replace(/(\d)/g, " \\$1 ") # 数値と認識しないようにする
           .replace(/([-\+\*!%&()=^~|@`\[\];<>,.])/g, " \\$1 ") # 演算子と認識しないようにする
           .replace(/(true|false|nil)/g, " \\$1 ") # booleanと認識しないようにする
-        "#{before}$s{string:::#{string}}s$"
+        "#{before}$s{yellow:::#{string}}s$"
     )
 
     ## symbol
@@ -113,7 +113,7 @@ $(document).ready ->
         before = RegExp.$1 || ""
         symbol = RegExp.$2 || ""
         after  = RegExp.$3 || ""
-        "#{before}${symbol:::#{symbol}}#{after}"
+        "#{before}${purple:::#{symbol}}#{after}"
     )
 
     ## number
@@ -129,10 +129,10 @@ $(document).ready ->
         if RegExp.$1?
           before = RegExp.$1 || ""
           number = RegExp.$2 || ""
-          "#{before}${number:::#{number}}"
+          "#{before}${purple:::#{number}}"
         else
           number = RegExp.$3 || ""
-          "${number:::#{number}}"
+          "${purple:::#{number}}"
     )
 
     ## boolean and null
@@ -142,7 +142,7 @@ $(document).ready ->
       ->
         before = RegExp.$1 || ""
         symbol = RegExp.$2 || ""
-        "#{before}${symbol:::#{symbol}}"
+        "#{before}${purple:::#{symbol}}"
     )
     
     ## operator
@@ -160,7 +160,7 @@ $(document).ready ->
         before   = RegExp.$1 || ""
         operator = RegExp.$2 || ""
         after    = RegExp.$3 || ""
-        "#{before}${operator:::#{operator}}#{after}"
+        "#{before}${red:::#{operator}}#{after}"
     )
 
     # # escape sequence
@@ -198,6 +198,19 @@ $(document).ready ->
       .replace(/\ \\(\d)\ /g,"$1")
       .replace(/\ \\([-\+\*!%&()=^~|@`\[\];<>,.])\ /g,"$1")
       .replace(/\ \\(true|false|nil)\ /g,"$1")
+
+    ## --- 以下は中間言語ではない --- ##
+
+    ## escape sequence
+    code = code.replace(///
+      ( 
+        \\. # escape-sequence in string
+      )
+      ///g,
+      ->
+        escape_sequence = RegExp.$1 || ""
+        "<dvi class=\"purple\">#{escape_sequence}</dvi>"
+    )
 
     # comment
     code = code.replace(///

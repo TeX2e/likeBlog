@@ -1,12 +1,12 @@
 
 $(document).ready ->
   $('.markdown-body p').each ->
-    code_deco = $(this).html()
+    code_discription = $(this).html()
 
-    ## :caption{caption}{code-type}
+    ## :code{code-type}{caption}
     code_type = ""
-    code_deco = code_deco.replace(///
-      :caption{([^}\n]*)}\s*(?:{([^}\n]*)})?
+    code_discription = code_discription.replace(///
+      :code{([^}\n]*)}\s*(?:{([^}\n]*)})?
       ///, 
       ->
         code_type    = RegExp.$1 || ""
@@ -14,7 +14,7 @@ $(document).ready ->
         hidden = if code_caption == "" then ' hidden' else ''
         "<span class=\"#{code_type}#{hidden}\">#{code_caption}</span>"
     )
-    $(this).html(code_deco) # pタグに対する置き換えを保存
+    $(this).html(code_discription) # pタグに対する置き換えを保存
 
     return if not code_type? or code_type == ""
     
