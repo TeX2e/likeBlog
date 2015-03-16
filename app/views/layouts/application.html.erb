@@ -2,7 +2,10 @@
 <html>
 <head>
   <% 
-    title = @post ? @post.title + " - " : ""
+    title = ""
+    if @post && @post.title
+      title = @post.title + " - "
+    end
     title += "まこの独学ノート"
   %>
   <title><%= title %></title>

@@ -4,7 +4,8 @@ class Tex2eController < ApplicationController
     Post.where("publish = ?", true).select("tag").uniq.each do |recode|
       @navigate_tags << recode.tag
     end
-    @navigate_tags.reject! { |e| e.blank? }
+    @navigate_tags.reject!(&:blank?).sort_by! { |tag| tag.downcase }
+
 
     tag = params[:tag]
     if tag

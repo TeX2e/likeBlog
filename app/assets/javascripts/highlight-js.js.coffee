@@ -1,58 +1,43 @@
-# ruby highlighting
+# js highlighting
 
 $(document).ready ->
-	$('div.markdown-body pre.ruby > code').each ->
+	$('div.markdown-body pre.js > code').each ->
 		code = $(this).html()
 		
 		## tab -> space
-		code = code.replace(/\t/g, "  ")
+		code = code.replace(/\t/g, "    ")
 
-		## keyword
+		## def function 1
 		code = code.replace(///
-			((?:\n|^)\s*)
-			(
-				end
-				# |do|if|unless
-				|elsif|else|for|while|until|return|require
-				# |def
-				|class|module|public|protected|attr_(?:writer|reader|accessor)
-				|case|when|begin|rescue
+			\b function \s+ (\w+) \s* \( ([\w\s,]*) \)
+			///g, 
+			"function ${green:::$1}(${orange:::$2})"
+		)
+		## def function 2
+		code = code.replace(///
+			(\w+) \s* = \s*\b function \s* \( ([\w\s,]*) \)
+			///g, 
+			"${green:::$1} = function(${orange:::$2})"
+		)
+
+		## init keyword
+		code = code.replace(///
+			\b( var|function|void )\b
+			///g,
+			"${sky-blue:::$1}"
+		)
+
+		## strong keyword
+		code = code.replace(///
+			\b(
+				break|case|catch|continue|default|do|else|finally
+				|for|if|return|switch|try|while|finally|throws
+				|delete|in|instanceof|new|typeof|with
 			)\b
-			|
-			(\s)(
-				do|if|unless
-			)(?=\s)
-			///g, 
-			->
-				before  = RegExp.$1 || RegExp.$3 || ""
-				keyword = RegExp.$2 || RegExp.$4 || ""
-				"#{before}${red:::#{keyword}}"
+			///g,
+			"${red:::$1}"
 		)
 
-		## def function
-		code = code.replace(///
-			((?:\n|^)\s*) def \s+
-			( 
-				\w[\w\d]+[?!=]?  # the method name
-				|===?|>[>=]?|<=>|<[<=]?|[%&`/\|]|\*\*?|=?~|[-+]@?|\[\]=?  # syntactic sugar
-			)
-			(?:
-				(\() # right paren
-				((?:[\w\d\s,*]+|&amp;)+)? # args
-				(\)) # left paren
-			)?
-			///g, 
-			->
-				before    = RegExp.$1 || ""
-				func_name = RegExp.$2 || ""
-				def_func  = "#{before}${red:::def} ${green:::#{func_name}}"
-				r_paren   = RegExp.$3 || ""
-				args      = RegExp.$4 || ""
-				l_paren   = RegExp.$5 || ""
-				args = "${orange:::#{args}}" unless args == ""
-				return def_func + r_paren + args + l_paren
-		)
-		
 		## regexp
 		# スラッシュ/は割り算の記号なのか判断する必要があるので、
 		#       / / -> 2つの演算子
@@ -80,7 +65,7 @@ $(document).ready ->
 					.replace(/(true|false|nil)/g, " \\$1 ") # booleanと認識しないようにする
 				"#{before}$r{orange:::#{regexp}}r$"
 		)
-		
+
 		## string
 		code = code.replace(///
 			([^\\])
@@ -103,61 +88,56 @@ $(document).ready ->
 				"#{before}$s{yellow:::#{string}}s$"
 		)
 
-		## symbol
-		code = code.replace(///
-			([^:\\])
-			( :[\w\d]+ | [\w\d]+: )
-			([^:])
-			///g, 
-			->
-				before = RegExp.$1 || ""
-				symbol = RegExp.$2 || ""
-				after  = RegExp.$3 || ""
-				"#{before}${purple:::#{symbol}}#{after}"
-		)
-
 		## number
 		code = code.replace(///
 			([^\w\\])(
 				\d+(?:\.\d+)?  # match int (and float)
 			)(?!\w)
 			|
-			(\d[\d_]+\d)  # include underscore
+			\b(Infinity|NaN|undefined)\b
 			///g, 
 			->
 				before = RegExp.$1 || ""
 				number = RegExp.$2 || RegExp.$3 || ""
-				return "#{before}${purple:::#{number}}"
+				"#{before}${purple:::#{number}}"
 		)
 
 		## boolean and null
 		code = code.replace(///
-			([^\\])(true|false|nil)\b
+			([^\\])(true|false|null)\b
 			///g, 
 			->
 				before = RegExp.$1 || ""
 				symbol = RegExp.$2 || ""
 				"#{before}${purple:::#{symbol}}"
 		)
-		
+
 		## operator
 		code = code.replace(///
 			(\s)(
-				&lt;&lt;=|&lt;&lt; # <<=|<<
-				|%=|&=|\*=|\*\*=|\+=|\-=|\^=|\|{1,2}=
-				|&lt;=&gt;|&lt;|&gt;|&lt;=|&gt;=  # >|<|<=|>=|<=>
-				|={1,3}|=~|!=|!~|\?
-				|!+|\bnot\b|&amp;&amp;|\band\b|\|\|?|\bor\b|\^
-				|%|&amp;|\*\*|\*|\+|\-|/
+				%|\-|\+|\*|\/|={1,3}|!={1,2}
+				|&lt;=|&gt;=|&lt;&lt;=|&gt;&gt;=|&gt;&gt;&gt;=|&lt;&gt;|&lt;|&gt;
+				|&amp;&amp;|\|\||\?|\*=|%=|\+=|\-=|&amp;=|\^=
+				|\b(?:in|instanceof|new|delete|typeof|void)\b
 			)(\s)
+			|
+			( !\b |\+\+|\-\- )
 			///g, 
 			->
 				before   = RegExp.$1 || ""
-				operator = RegExp.$2 || ""
+				operator = RegExp.$2 || RegExp.$4 || ""
 				after    = RegExp.$3 || ""
 				"#{before}${red:::#{operator}}#{after}"
 		)
 
+		## use prop or function
+		code = code.replace(///
+			\.(\w+)	
+			///g, 
+			".${sky-blue:::$1}"
+		)
+
+		## 中間言語をhtml形式に変換する
 		## replace ${xxx:::content} -> <div class="xxx">content</div>
 		code = code.replace(///
 			\$\{   #  { で囲まれた中間言語  # 普通
@@ -200,7 +180,9 @@ $(document).ready ->
 
 		## comment
 		code = code.replace(///
-			(\#[^\n]*)
+			( \/\*
+				(?:[^*]+|\*[^/])*
+			\*\/ )
 			///g,
 			->
 				comment = RegExp.$1 || ""
@@ -208,6 +190,6 @@ $(document).ready ->
 				"<dvi class=\"comment\">#{comment}</dvi>"
 		)
 
-		$(this).html(code) # replace hightlight code
-		return
-	# end ruby
+		$(this).html(code)
+
+

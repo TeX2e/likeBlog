@@ -30,18 +30,21 @@
     <%= @post.tag %>
   </p>
 
-  <p>
-    <strong>Text:</strong>
-    <%= @post.text %>
-  </p>
-
   <p><strong>HTML Text:</strong></p>
+
   <hr>
 
   <div class="markdown-body codehilite">
     <h1><%= @post.title %></h1>
     <%= @post.html_text.html_safe if @post.html_text %>
   </div>
+
+  <hr>
+  
+  <p>
+    <strong>Text:</strong>
+    <%= @post.text %>
+  </p>
 </main>
 
 <hr>
