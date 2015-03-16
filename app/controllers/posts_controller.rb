@@ -5,7 +5,18 @@ class PostsController < ApplicationController
   # GET /posts
   # GET /posts.json
   def index
-    @posts = Post.all
+    @navigate_tags = []
+    Post.select("tag").uniq.each do |recode|
+      @navigate_tags << recode.tag
+    end
+    @navigate_tags.reject! { |e| e.blank? }
+    
+    tag = params[:tag]
+    if tag
+      @posts = Post.where("tag = ?", tag)
+    else
+      @posts = Post.all
+    end
   end
 
   # GET /posts/1

@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  # get 'posts(/:tag)' => 'posts#index', as: 'posts', tag: /\w+/
   resources :posts, id: /\d+/
 
   get 'tex2e' => 'tex2e#index', as: 'tex2e'

@@ -1,7 +1,10 @@
+# name:string password:string crypted_password:string
+
 class Admin < ActiveRecord::Base
-  def initialize
+  def initialize(name, password)
     super
-    @password
+    self.name = name
+    @password = password
   end
 
   attr_accessor :password

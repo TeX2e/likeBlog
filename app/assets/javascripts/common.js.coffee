@@ -30,20 +30,18 @@ $(document).ready ->
         return
     return
 
-
+# 主にソースコード
 bright_mode = [
-  "console", "ruby", "c", "cpp", "csharp", "java", "javascript", "html", "php", "python"
+  "ruby", "c", "cpp", "csharp", "java", "javascript", "html", "php", "python"
+]
+
+# 主に出力結果
+little_bright_mode = [
+  "console"
 ]
 
 ## ソースコード上部の説明
 $(document).ready ->
-  # source code or console
-  for type in bright_mode
-    $(".markdown-body p span.#{type}").each ->
-      # $(this).css("color", "rgba(250,250,250,1)")
-      # $(this).css("background-color", "rgba(80,80,80,1)")
-      return
-
   # hidden
   $('.markdown-body p span.hidden').each ->
     $(this).hide()
@@ -55,6 +53,11 @@ $(document).ready ->
     $("div.markdown-body pre.#{type}").each ->
       $(this).css("color", "rgba(250,250,250,1)")
       $(this).css("background-color", "rgba(40,40,40,1)")
+
+  for type in little_bright_mode
+    $("div.markdown-body pre.#{type}").each ->
+      $(this).css("color", "rgba(250,250,250,1)")
+      $(this).css("background-color", "rgba(60,60,60,1)")
 
 
 # highlight all pre>code 

@@ -1,25 +1,32 @@
-<div class="markdown-body">
-  <h1>Listing Posts</h1>
 
-  <table>
-    <thead>
-      <tr>
-        <th>Title</th>
-        <th>Tag</th>
-        <th>Text</th>
-        <th colspan="3"></th>
-      </tr>
-    </thead>
+<aside>
+  <% if @navigate_tags %>
+    <%= link_to 'Home', tex2e_path %><br>
+    <% @navigate_tags.each do |tag| %>
+      └ <%= link_to tag, tex2e_path(tag: tag) %><br>
+    <% end %>
+  <% end %>
+</aside>
 
-    <tbody>
-      <% @posts.each do |post| %>
-        <tr>
-          <td><%= cut_off post.title, 20 %></td>
-          <td><%= cut_off post.tag, 20 %></td>
-          <td><%= cut_off post.text,  40 %></td>
-          <td><%= link_to '続きを読む', show_tex2e_path(post) %></td>
-        </tr>
-      <% end %>
-    </tbody>
-  </table>
-</div>
+<main role="main">
+  <div class="title">
+    <h1>まこの独学ノート 一覧</h1>
+    <hr>
+  </div>
+
+  <% @posts.reverse_each do |post| %>
+    <div class="post-list">
+      <span class="date">
+        <%= "#{post.date} " if post.date && post.date != "" %>
+      </span>
+      <span class="title">
+        <%= link_to post.title, show_tex2e_path(post) %>
+      </span>
+      <span class="tag">
+        <%= " - #{post.tag}" if post.tag && post.tag != "" %>
+      </span>
+      <hr>
+    </div>
+  <% end %>
+</main>
+

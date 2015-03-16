@@ -65,7 +65,6 @@ $(document).ready ->
         "<dvi class=\"#{class_name}\">#{content}</dvi>"
     )
 
-    console.log code
     ## comment
     code = code.replace(///
       ( &lt;!--
@@ -77,7 +76,6 @@ $(document).ready ->
         comment = comment.replace(/<[^>]+>/g, "")
         "<dvi class=\"comment\">#{comment}</dvi>"
     )
-    console.log code
 
     code = $(this).html(code)
 

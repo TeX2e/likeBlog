@@ -93,18 +93,11 @@ $(document).ready ->
       ([^\w\\])(
         \d+(?:\.\d+)?  # match int (and float)
       )(?!\w)
-      |
-      (\d[\d_]+\d)  # include underscore
       ///g, 
       ->
-        # jsは否定の先読み、否定の後読みが出来ないため、前後のキャプチャを行った
-        if RegExp.$1?
-          before = RegExp.$1 || ""
-          number = RegExp.$2 || ""
-          "#{before}${purple:::#{number}}"
-        else
-          number = RegExp.$3 || ""
-          "${purple:::#{number}}"
+        before = RegExp.$1 || ""
+        number = RegExp.$2 || RegExp.$3 || ""
+        return "#{before}${purple:::#{number}}"
     )
 
     ## boolean and null

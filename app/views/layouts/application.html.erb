@@ -1,14 +1,17 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Blog</title>
+  <% 
+    title = @post ? @post.title + " - " : ""
+    title += "まこの独学ノート"
+  %>
+  <title><%= title %></title>
   <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
   <%= csrf_meta_tags %>
 </head>
 <body>
-
-<%= yield %>
-
+  <%#= render 'shared/aside' %>
+  <%= yield %>
 </body>
 </html>

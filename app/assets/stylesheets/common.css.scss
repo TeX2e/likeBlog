@@ -1,4 +1,4 @@
-/* common scss ()
+/* common scss 
   ----------------------------- */
 
 /* reset css
@@ -205,16 +205,13 @@ input,select,textarea,button {
 
 
 
-
-
 /* github css
   ------------------------------------ */
 $color_scheme: bright;
 
 body {
-  // min-width: 600px;
   min-width: 600px;
-  max-width: 800px;
+  max-width: 1000px;
   padding: 1em;
   font: 13px/1.4 Helvetica, arial, freesans, clean, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol";
   color: #333;
@@ -353,7 +350,7 @@ pre {
 }
 
 .container {
-  max-width: 920px;
+  max-width: 1020px;
   margin: 0 auto 20px auto;
 }
 
@@ -380,6 +377,7 @@ pre {
   font-size: 16px;
   line-height: 1.6;
   padding: 1em;
+  padding-top: 0em;
   word-wrap: break-word;
   >*:first-child {
     margin-top: 0 !important;
@@ -448,16 +446,17 @@ pre {
   }
   h1 {
     padding-bottom: 0.3em;
-    font-size: 2.25em;
+    font-size: 1.5em;
     line-height: 1.2;
-    border-bottom: 1px solid #eee;
+    //border-bottom: 1px solid #eee;
+    text-align: center;
   }
   h1 .anchor {
     line-height: 1;
   }
   h2 {
     padding-bottom: 0.3em;
-    font-size: 1.75em;
+    font-size: 1.4em;
     line-height: 1.225;
     border-bottom: 1px solid #eee;
   }
@@ -465,20 +464,20 @@ pre {
     line-height: 1;
   }
   h3 {
-    font-size: 1.5em;
+    font-size: 1.3em;
     line-height: 1.43;
   }
   h3 .anchor {
     line-height: 1.2;
   }
   h4 {
-    font-size: 1.25em;
+    font-size: 1.2em;
   }
   h4 .anchor {
     line-height: 1.2;
   }
   h5 {
-    font-size: 1em;
+    font-size: 1.1em;
   }
   h5 .anchor {
     line-height: 1.1;
@@ -783,21 +782,21 @@ pre {
     //.symbol    { color: rgba(157,100,255,1) } /* Literal.String.Symbol */
     //.escape-sequence { color: rgba(165,115,255,1) } /* Escape Sequence */
 
-    .red      { color: rgba(240,0,70,1) }
+    .red      { color: rgba(240,30,100,1) }
     .sky-blue { color: rgba(90,220,250,1) }
-    .purple   { color: rgba(165,115,255,1) }
-    .green    { color: rgba(150,232,0,1) }
+    .purple   { color: rgba(175,125,255,1) }
+    .green    { color: rgba(160,250,10,1) }
     .yellow   { color: rgba(220,220,100,1) }
-    .orange   { color: rgba(244,156,0,1) }
+    .orange   { color: rgba(250,160,10,1) }
   }
 }
 
 
 
 // code caption
-.markdown-body p span {
+.markdown-body p > span {
   color: rgba(0,0,0,1);
-  background-color: rgba(240,240,240,1);
+  background-color: rgba(225,225,225,1);
   font: 12px Consolas, "Liberation Mono", Menlo, Courier, monospace;
   // border: 1px solid #ddd;
   box-sizing: content-box;
@@ -813,6 +812,69 @@ pre {
 .markdown-body pre {
   color: rgba(0,0,0,1);
   background-color: rgba(240,240,240,1);
+}
+
+
+
+#title {
+  font-size: 2.25em;
+}
+
+main {
+  margin-left: 12em;
+  //min-width: 600px;
+  //max-width: 800px;
+  // margin-right: -80px;
+  overflow: auto;
+  > .title {
+    text-align: center;
+  }
+  > .date {
+    text-align: right;
+  }
+}
+
+aside {
+  float: left;
+  position: fixed;
+  width: 10em;
+  margin-top: 1em;
+  white-space: nowrap;
+  overflow: hidden;
+  .not-fixed {
+    position: relative;
+  }
+}
+
+footer {
+  clear: both;
+}
+
+#TOC {
+  padding-top: 1em;
+}
+
+#title {
+  font-size: 2.25em;
+  text-align: center;
+}
+
+div.post-list {
+  clear: both;
+  font-size: 120%;
+  > .date {
+    margin-right: 1em;
+  }
+  > .title {
+  }
+  > .tag {
+    float: right;
+    color: #999;
+    font-size: 90%;
+  }
+  > hr {
+    margin: 1.0em;
+  }
 }
 
 

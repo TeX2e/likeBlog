@@ -1,17 +1,31 @@
-<div class="date">
-  <%= @post.date.strftime("%Y年%m月%d日") %>
-</div>
 
-<div class="title">
-  <h1><%= @post.title %></h1>
-</div>
+<aside>
+  <% tag = @post.tag if @post %>
+  <% tag ||= "" %>
+  <%= link_to 'Home', tex2e_path %> <br>
+  └ <%= link_to tag, tex2e_path(tag: tag) %>
+  <hr>
+  <div id="TOC"></div>
+</aside>
 
-<hr>
+<main role="main">
+  <div id="title">
+    <h1>まこの独学ノート</h1>
+  </div>
 
-<div class="markdown-body">
-  <div class="codehilite">
+  <hr>
+
+  <div class="date">
+    <%= @post.date.strftime("%Y年%m月%d日") %>
+  </div>
+
+  <div class="markdown-body codehilite">
+    <h1><%= @post.title %></h1>
     <%= @post.html_text.html_safe if @post.html_text %>
   </div>
-</div>
+</main>
 
-<%= link_to 'Back', tex2e_path %>
+<footer>
+  <%#= link_to 'Back', tex2e_path %>
+</footer>
+
