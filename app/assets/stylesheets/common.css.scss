@@ -766,7 +766,7 @@ pre {
   }
 } @else if $color_scheme == bright {
   .codehilite {
-    .comment   { color: rgba(130,130,110,1) }//font-style: italic }        /* Comment */
+    .comment  { color: rgba(130,130,110,1) }//font-style: italic }        /* Comment */
     .red      { color: rgba(240,30,100,1) }
     .sky-blue { color: rgba(90,220,250,1) }
     .skyblue  { color: rgba(90,220,250,1) }
@@ -799,8 +799,6 @@ pre {
   color: rgba(0,0,0,1);
   background-color: rgba(240,240,240,1);
 }
-
-
 
 #title {
   font-size: 2.25em;

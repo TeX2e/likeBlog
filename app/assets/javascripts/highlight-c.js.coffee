@@ -8,6 +8,9 @@ $(document).ready ->
 		# split token
 		tokens = new SplitCToken(code).tokens
 
+		# for token in tokens
+		# 	console.log "#{token.type} : #{token.text}"
+
 		# markup token
 		tokens_tmp = []
 		for token in tokens
@@ -31,11 +34,9 @@ $(document).ready ->
 		for key, token of tokens
 			key = Number(key)
 			before2_type = if tokens[key-2] then tokens[key-2].type else "_out_of_bounds"
-			# before2_text = if tokens[key-2] then tokens[key-2].text else "_out_of_bounds"
 			type = token.type
 			text = token.text
 			after_type  = if tokens[key+1] then tokens[key+1].type else "_out_of_bounds"
-			# after_text  = if tokens[key+1] then tokens[key+1].text else "_out_of_bounds"
 			# DefFunc
 			if type == "Func" && after_type == "lParen" && 
 					(before2_type == "InitKeyword" || before2_type == "Ident" || before2_type == "Const") 

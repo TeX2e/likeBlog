@@ -2,7 +2,47 @@
 
 $(document).ready ->
 	$('div.markdown-body pre.css > code').each ->
+		console.time('css highlighting');
 		code = $(this).html()
+
+		# split token
+		tokens = new SplitCSSToken(code).tokens
+
+		# for token in tokens
+		# 	console.log "#{token.type} : #{token.text}"
+		
+		# markup token
+		tokens_tmp = []
+		for token in tokens
+			type = token.type
+			text = token.text
+			highlight_text = 
+				switch type
+					when "Comment" 			then "<span class=\"comment\">#{text}</span>"
+					when "Str"				then "<span class=\"yellow\">#{text}</span>"
+					when "HTMLTag", "Unit"	then "<span class=\"red\">#{text}</span>"
+					when "Attr"				then "<span class=\"green\">#{text}</span>"
+					when "Prop"				then "<span class=\"skyblue\">#{text}</span>"
+					when "Num"				then "<span class=\"purple\">#{text}</span>"
+					when "Ident", "Const"	then "<span class=\"yellow\">#{text}</span>"
+					when "Func"				then "<span class=\"skyblue\">#{text}</span>"
+					when "Selector", "Control"	then "<span class=\"red\">#{text}</span>"
+			tokens_tmp.push( {
+				type: type,
+				text: highlight_text || text
+			} )
+		tokens = tokens_tmp.concat()
+
+		# array -> string
+		code = []
+		for token in tokens
+			code.push token.text
+		code = code.join("")
+
+		$(this).html(code)
+		console.timeEnd('css highlighting');
+
+		###
 		
 		## tab -> space
 		code = code.replace(/\t/g, "    ")
@@ -113,4 +153,5 @@ $(document).ready ->
 		)
 
 		$(this).html(code)
+		###
 

@@ -4,80 +4,67 @@ $(document).ready ->
 	$('div.markdown-body pre.html > code').each ->
 		code = $(this).html()
 		
-		## tab -> space
-		code = code.replace(/\t/g, "  ")
+		# split token
+		tokens = new SplitHTMLToken(code).tokens
 
-		## html tag
-		code = code.replace(///
-			&lt;
-				(\/)?  # start or end tag
-				(\w+)  # tag name
-				(\s+(?:[^&]+|&(?!gt;))+)?  # attrs
-			&gt;
-			///g, 
-			->
-				slash    = RegExp.$1 || ""
-				html_tag = RegExp.$2 || ""
-				attrs    = RegExp.$3 || ""
-				# 属性のハイライト
-				# attr=" にマッチする
-				attrs = attrs.replace(///
-					\b([-\w]+\s*)=\s*"
-					///g,
-					->
-						attr = RegExp.$1 || ""
-						"${green:::#{attr}}=\""
-				)
-				# 文字列のハイライト
-				attrs = attrs.replace(///
-					("(?:[^\\"\n]+|\\.)*")
-					///g,
-					->
-						attr = RegExp.$1 || ""
-						"$s{yellow:::#{attr}}s$"
-				)
-				return "&lt;#{slash}${red:::#{html_tag}}#{attrs}&gt;"
-		)
+		# for token in tokens
+		# 	console.log "#{token.type} : #{token.text}"
+		
+		# markup token
+		tokens_tmp = []
+		isInHTMLTag = false
+		for token in tokens
+			type = token.type
+			text = token.text
 
-		# escape-squence
-		code = code.replace(///
-			(&amp;\w+;)
-			///g,
-			->
-				escape = RegExp.$1 || ""
-				"${purple:::#{escape}}"
-		)
+			if type == "lt"
+				isInHTMLTag = true
+			if type == "gt"
+				isInHTMLTag = false
 
-		## 中間言語をhtmlタグに変換する
-		## convert ${xxx:::content} -> <div class="xxx">content</div>
-		code = code.replace(///
-			\$\{   #  { で囲まれた中間言語  # 普通
-				([^:]+):::([^}]+)
-			\}
-			|
-			\$s\{  # h{ で囲まれた中間言語  # 文字列
-				([^:]+):::((?:[^}]+|\}r\$)+)
-			\}s\$
-			///g, 
-			->
-				class_name = RegExp.$1 || RegExp.$3 || RegExp.$5 || ""
-				content    = RegExp.$2 || RegExp.$4 || RegExp.$6 || ""
-				"<dvi class=\"#{class_name}\">#{content}</dvi>"
-		)
+			highlight_text = ""
+			if type == "Comment"
+				highlight_text = "<span class=\"comment\">#{text}</span>"
+			if isInHTMLTag
+				highlight_text = 
+					switch type
+						when "Str"		then "<span class=\"yellow\">#{text}</span>"
+						when "Ident"	then type = "HTMLIdent"; text
+			tokens_tmp.push( {
+				type: type,
+				text: highlight_text || text
+			} )
+		tokens = tokens_tmp.concat()
+		
+		# markup html tag
+		tokens_tmp = []
+		for key, token of tokens
+			key = Number(key)
+			before2_type = if tokens[key-2] then tokens[key-2].type else "_out_of_bounds"
+			before_type  = if tokens[key-1] then tokens[key-1].type else "_out_of_bounds"
+			type = token.type
+			text = token.text
+			after_type  = if tokens[key+1] then tokens[key+1].type else "_out_of_bounds"
+			if (before_type == "lt" || before2_type == "lt") && type == "HTMLIdent"
+				type = "HTMLTag"
+				text = "<span class=\"red\">#{text}</span>"
+			if type == "HTMLIdent"
+				text = "<span class=\"green\">#{text}</span>"
+			tokens_tmp.push { type:type, text:text }
+		tokens = tokens_tmp.concat()
 
-		## comment
-		code = code.replace(///
-			( &lt;!--
-				(?:[^-]+|-(?!-&gt;))*
-			--&gt; )
-			///g,
-			->
-				comment = RegExp.$1 || ""
-				comment = comment.replace(/<[^>]+>/g, "")
-				"<dvi class=\"comment\">#{comment}</dvi>"
-		)
+		# array -> string
+		code = []
+		for token in tokens
+			code.push token.text
+		code = code.join("")
+
+		# escape sequence
+		code = code.replace(/(&amp;[a-z#\d]+;)/g, ->
+			"<span class=\"purple\">#{RegExp.$1}</span>")
 
 		code = $(this).html(code)
+
 
 
 
