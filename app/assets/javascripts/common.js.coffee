@@ -66,8 +66,8 @@ class window.SplitToken
 		# split token
 		current_pos = 0
 		while true
-			stil_read_code = @code.slice(current_pos, -1)
-			token = @take_token(stil_read_code)
+			still_read_code = @code.slice(current_pos, -1)
+			token = @take_token(still_read_code)
 			type = token.type
 			text = token.text
 			current_pos += text.length
@@ -112,8 +112,10 @@ class window.SplitRubyToken extends SplitToken
 				|class|module|public|protected|attr_(?:writer|reader|accessor)
 				|case|when|begin|rescue
 			)\b///.test code # func_name()
-		return { type:"Num",	text:RegExp.$1 } if /^(\d[\d_]+)/.test code # 10_000
+		return { type:"Num",	text:RegExp.$1 } if /^(\d[\d_]*)/.test code # 10_000
+		return { type:"Range",	text:RegExp.$1 } if /^(\.\.\.?)/.test code # 10_000
 		return { type:"Sym",	text:RegExp.$1 } if /^(:\w+|\w+:)(?!:)/.test code # :symbol
+		return { type:"Chain",	text:RegExp.$1 } if /^(\.|::)/.test code # :symbol
 		super code
 
 ## C
