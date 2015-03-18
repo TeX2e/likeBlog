@@ -6,7 +6,7 @@ $(document).ready ->
 		code = $(this).html()
 
 		# split token
-		tokens = new SplitToken(code).tokens
+		tokens = new SplitRubyToken(code).tokens
 
 		# markup token
 		tokens_tmp = []
@@ -21,21 +21,13 @@ $(document).ready ->
 						match = ///^([=\(\[,]\s?)(\/(?:[^\\/]+|\\.)*\/[gimx]*)///.exec text
 						before = match[1]
 						text   = match[2]
-						before = "<span class=\"red\">#{RegExp.$1}</span>" if /^(=\s?)/.test before
+						# before = "<span class=\"red\">#{RegExp.$1}</span>" if /^(=\s?)/.test before
 						"#{before}<span class=\"orange\">#{text}</span>"
-					when "Num" 		then "<span class=\"purple\">#{text}</span>"
-					when "Flag" 	then "<span class=\"purple\">#{text}</span>"
-					when "Ope" 		
-						if text != "|"  # 縦棒は記号としない ex: do |i|; end
-							"<span class=\"red\">#{text}</span>"
-			# Keyword
-			if ///^(end|do|if|unless|elsif|else|for|while|until|return|require
-					|def
-					|class|module|public|protected|attr_(?:writer|reader|accessor)
-					|case|when|begin|rescue
-					)///.test text
-				type = "Keyword"
-				highlight_text = "<span class=\"red\">#{text}</span>"
+					when "Num", "Sym", "Flag" 	then "<span class=\"purple\">#{text}</span>"
+					when "Keyword", "Def" 		then "<span class=\"red\">#{text}</span>"
+					# when "Ope" 		
+					# 	if text != "|" # 縦棒は記号としない ex: do |i|; end
+					# 		"<span class=\"red\">#{text}</span>"
 			tokens_tmp.push( {
 				type: type,
 				text: highlight_text || text
@@ -53,11 +45,28 @@ $(document).ready ->
 			after_type  = if tokens[key+1] then tokens[key+1].type else "_out_of_bounds"
 			after_text  = if tokens[key+1] then tokens[key+1].text else "_out_of_bounds"
 			# DefFunc
-			if before2_type == "Keyword" && type == "Func" && after_type == "lParen"
+			if before2_type == "Def" && (type == "Func" || type == "Ident" || type == "Ope")
 				type = "DefFunc"
 				text = "<span class=\"green\">#{text}</span>"
 			tokens_tmp.push { type:type, text:text }
-			
+		tokens = tokens_tmp.concat()
+
+		# markup DefFuncArgs
+		tokens_tmp = []
+		isArgs = false
+		for key, token of tokens
+			key = Number(key)
+			before_type = if tokens[key-1] then tokens[key-1].type else "_out_of_bounds"
+			type = token.type
+			text = token.text
+			# DefFuncArgs
+			if before_type == "DefFunc" && type == "lParen"
+				text = "#{text}<span class=\"orange\">"
+				isArgs = true
+			if isArgs == true && type == "rParen"
+				text = "</span>#{text}"
+				isArgs = false
+			tokens_tmp.push { type:type, text:text }
 		tokens = tokens_tmp.concat()
 		
 		code = []

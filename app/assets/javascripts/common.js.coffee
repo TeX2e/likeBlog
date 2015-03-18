@@ -60,14 +60,14 @@ $(document).ready ->
 			$(this).css("background-color", "rgba(35,35,35,1)")
 
 
-class SplitToken
+class window.SplitToken
 	constructor: (@code)->
 		@tokens = []
 		# split token
 		current_pos = 0
 		while true
 			stil_read_code = @code.slice(current_pos, -1)
-			token = take_token(stil_read_code)
+			token = @take_token(stil_read_code)
 			type = token.type
 			text = token.text
 			current_pos += text.length
@@ -77,16 +77,15 @@ class SplitToken
 				break
 
 	# ソースコードから最初のtokenを返す
-	take_token = (code)->
+	take_token: (code)->
 		return { type:"Space",	text:RegExp.$1 } if /^(\s+)/.test code
-		return { type:"Comment",text:RegExp.$1 } if /^(\/\/.*)/.test code # // comment
-		return { type:"Comment",text:RegExp.$1 } if /^(\/\*(?:[^*]+|\*[^\/])*\*\/)/.test code # /* comment */
 		return { type:"Func",	text:RegExp.$1 } if /^(\w+)(?=\()/.test code # func_name()
 		return { type:"Str",	text:RegExp.$1 } if /^('(?:[^\\'\n]*|\\.)*')/.test code # 'str'
 		return { type:"Str",	text:RegExp.$1 } if /^("(?:[^\\"\n]*|\\.)*")/.test code # "str"
 		return { type:"Tag",	text:RegExp.$1 } if /^(&lt;[^&\n]+&gt;)/.test code # <stdio.h>
-		return { type:"Reg",	text:RegExp.$1 } if /^([=([,]\s?\/(?:[^\\/]+|\\.)*\/[gimx]*)(?=[\s,)\]])/.test code # /regexp/
-		return { type:"Num",	text:RegExp.$1 } if /^(\d[\d_]+)/.test code # 10_000
+		return { type:"Reg",	text:RegExp.$1 } if ///^(
+				[=([,]\s? \/(?:[^\\/]+|\\.)*\/[gimx]*) (?=[\s,)\]]
+			)///.test code # /regexp/
 		return { type:"Num",	text:RegExp.$1 } if /^(0x?[\da-f]+)/i.test code # 0xfff
 		return { type:"Num",	text:RegExp.$1 } if /^(\.?\d+\.?(?:\d+)?(?:e[-+]\d+)?)/i.test code # 12.34e+5
 		return { type:"Ope",	text:RegExp.$1 } if ///^(
@@ -96,14 +95,41 @@ class SplitToken
 			)///.test code
 		return { type:"lParen",	text:RegExp.$1 } if /^([({])/.test code
 		return { type:"rParen",	text:RegExp.$1 } if /^([)}])/.test code
-		return { type:"EOE",	text:RegExp.$1 } if /^(;)/.test code
-		return { type:"Flag",	text:RegExp.$1 } if /^(true|false|null|nil|EOF)/i.test code
+		return { type:"Flag",	text:RegExp.$1 } if /^(true|false|null|nil|EOF)\b/i.test code
 		return { type:"Const",	text:RegExp.$1 } if /^([A-Z]\w+)/.test code
 		return { type:"Ident",	text:RegExp.$1 } if /^(\w+)/.test code
 		return { type:"UnIdent",text:RegExp.$1 } if /^(.)/.test code
 		return { type:"EOF",	text:RegExp.$1 } if /^()$/.test code
 
-window.SplitToken = SplitToken
+## Ruby
+class window.SplitRubyToken extends SplitToken
+	take_token: (code)->
+		return { type:"Comment",text:RegExp.$1 } if /^(#.*)/.test code # // comment
+		return { type:"Func",	text:RegExp.$1 } if /^(\w+[?!=])/.test code # func_name?
+		return { type:"Def",	text:RegExp.$1 } if /^(def)\b/.test code
+		return { type:"Keyword",text:RegExp.$1 } if ///^(
+				end|do|if|unless|elsif|else|for|while|until|return|require
+				|class|module|public|protected|attr_(?:writer|reader|accessor)
+				|case|when|begin|rescue
+			)\b///.test code # func_name()
+		return { type:"Num",	text:RegExp.$1 } if /^(\d[\d_]+)/.test code # 10_000
+		return { type:"Sym",	text:RegExp.$1 } if /^(:\w+|\w+:)(?!:)/.test code # :symbol
+		super code
+
+## C
+class window.SplitCToken extends SplitToken
+	take_token: (code)->
+		return { type:"Comment",	text:RegExp.$1 } if /^(\/\/.*)/.test code # // comment
+		return { type:"Comment",	text:RegExp.$1 } if /^(\/\*(?:[^*]+|\*[^\/])*\*\/)/.test code # /* comment */
+		return { type:"InitKeyword",text:RegExp.$1 } if ///^(
+				int|float|char|long|double|unsigned|void|typedef|struct
+			)\b///.test code # /* comment */
+		return { type:"Keyword",	text:RegExp.$1 } if ///^(
+				if|else|for|while|return|break|continue|include|sizeof|switch|case
+			)\b///.test code # /* comment */
+		return { type:"Def",		text:RegExp.$1 } if /^(define)/.test code
+		super code
+
 
 # # ソースコードから最初のtokenを返す
 # take_token = (code)->
