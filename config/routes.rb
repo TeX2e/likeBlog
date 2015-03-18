@@ -2,8 +2,8 @@ Rails.application.routes.draw do
   # get 'posts(/:tag)' => 'posts#index', as: 'posts', tag: /\w+/
   resources :posts, id: /\d+/
 
-  get 'tex2e' => 'tex2e#index', as: 'tex2e'
-  get 'tex2e/:id' => 'tex2e#show', as: 'show_tex2e', id: /\d+/
+  get 'dnote' => 'dnote#index', as: 'dnote'
+  get 'dnote/:id' => 'dnote#show', as: 'show_dnote', id: /\d+/
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

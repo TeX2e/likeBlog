@@ -2,9 +2,9 @@
   <div class="breadcrumbs">
     <% tag = @post.tag if @post %>
     <% tag ||= "" %>
-    <%= link_to 'Publish Home', tex2e_path %> <br>
+    <%= link_to 'Publish Home', dnote_path %> <br>
     └ <%= link_to 'Publish ' + tag, posts_path(tag: tag) %> <br>
-    └ <%= link_to 'Publish View', show_tex2e_path(@post) %> <br>
+    └ <%= link_to 'Publish View', show_dnote_path(@post) %> <br>
     <%= link_to 'Admin Home', posts_path %> <br>
     └ <%= link_to 'Admin ' + tag, posts_path(tag: tag) %> <br>
     └ <%= link_to 'Admin Edit', edit_post_path(@post) %> <br>

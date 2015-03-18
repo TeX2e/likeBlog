@@ -2,8 +2,8 @@
 <aside>
   <% tag = @post.tag if @post %>
   <% tag ||= "" %>
-  <%= link_to 'Home', tex2e_path %> <br>
-  └ <%= link_to tag, tex2e_path(tag: tag) %>
+  <%= link_to 'Home', dnote_path %> <br>
+  └ <%= link_to tag, dnote_path(tag: tag) %>
   <hr>
   <div id="TOC"></div>
 </aside>
@@ -26,6 +26,6 @@
 </main>
 
 <footer>
-  <%#= link_to 'Back', tex2e_path %>
+  <%#= link_to 'Back', dnote_path %>
 </footer>
 

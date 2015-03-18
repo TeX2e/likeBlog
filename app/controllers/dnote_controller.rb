@@ -1,4 +1,4 @@
-class Tex2eController < ApplicationController
+class DnoteController < ApplicationController
   def index
     @navigate_tags = []
     Post.where("publish = ?", true).select("tag").uniq.each do |recode|

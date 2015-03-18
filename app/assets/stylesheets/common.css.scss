@@ -190,7 +190,7 @@ td,th {
 }
 
 input,select,textarea,button {
-	margin: 2px;
+  margin: 2px;
   font: 13px/1.4 Helvetica, arial, freesans, clean, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol";
 }
 
@@ -198,7 +198,9 @@ input,select,textarea,button {
 /* def
   ------------------------------------ */
 
-
+body {
+  tab-size: 4;
+}
 
 
 
@@ -368,7 +370,7 @@ pre {
   padding: 3px;
   article {
     padding-top: 30px;
-	}
+  }
 }
 
 .markdown-body {
@@ -446,7 +448,7 @@ pre {
   }
   h1 {
     padding-bottom: 0.3em;
-    font-size: 1.5em;
+    font-size: 1.75em;
     line-height: 1.2;
     //border-bottom: 1px solid #eee;
     text-align: center;
@@ -456,7 +458,7 @@ pre {
   }
   h2 {
     padding-bottom: 0.3em;
-    font-size: 1.4em;
+    font-size: 1.5em;
     line-height: 1.225;
     border-bottom: 1px solid #eee;
   }
@@ -746,44 +748,28 @@ pre {
 /* Syntax highlight */
 @if $color_scheme == light {
   .codehilite {
-  	// background: #ffffff;
-  	.comment   { color: #999988; font-style: italic }        /* Comment */
-  	.error     { color: #a61717; background-color: #e3d2d2 } /* Error */
-  	.keyword   { color: #000000; font-weight: bold }         /* Keyword */
-  	.func      { color: #990000 } /* Name.Function */
+    // background: #ffffff;
+    .comment   { color: #999988; font-style: italic }        /* Comment */
+    .error     { color: #a61717; background-color: #e3d2d2 } /* Error */
+    .keyword   { color: #000000; font-weight: bold }         /* Keyword */
+    .func      { color: #990000 } /* Name.Function */
     .args      { color: rgba(253,140,0,1) } /* Name.Arguments */
-  	.namespace { color: #555555 } /* Name.Namespace */
-  	.tag       { color: #000080 } /* Name.Tag */
-  	.variable  { color: #008080 } /* Name.Variable */
-  	.operator  { color: #000000 } /* Operator.Word */
-  	.number    { color: #009999 } /* Literal.Number */
-  	.string    { color: #dd1144 } /* Literal.String */
-  	.regex     { color: #009926 } /* Literal.String.Regex */
-  	.symbol    { color: #990073 } /* Literal.String.Symbol */
+    .namespace { color: #555555 } /* Name.Namespace */
+    .tag       { color: #000080 } /* Name.Tag */
+    .variable  { color: #008080 } /* Name.Variable */
+    .operator  { color: #000000 } /* Operator.Word */
+    .number    { color: #009999 } /* Literal.Number */
+    .string    { color: #dd1144 } /* Literal.String */
+    .regex     { color: #009926 } /* Literal.String.Regex */
+    .symbol    { color: #990073 } /* Literal.String.Symbol */
     .escape-sequence { color: rgba(157,100,255,1) } /* Escape Sequence */
   }
 } @else if $color_scheme == bright {
   .codehilite {
-    // background: #ffffff;
-    .comment   { color: #999988; font-style: italic }        /* Comment */
-    //.error     { color: #a61717; background-color: #e3d2d2 } /* Error */
-    //.keyword   { color: rgba(240,0,70,1) }//font-weight: bold }      /* Keyword */
-    //.type      { color: rgba(90,220,250,1) } // sky blue
-    //.func-c    { color: rgba(90,220,250,1) } // when you use function on c-language
-    //.func      { color: rgba(150,232,0,1) } /* Name.Function */
-    //.args      { color: rgba(253,140,0,1) } /* Name.Arguments */
-    //.namespace { color: #555555 } /* Name.Namespace */
-    //.tag       { color: #000080 } /* Name.Tag */
-    //.variable  { color: #008080 } /* Name.Variable */
-    //.operator  { color: rgba(247,0,84,1) } /* Operator.Word */
-    //.number    { color: rgba(165,115,255,1) } /* Literal.Number */
-    //.string    { color: rgba(220,220,100,1) } /* Literal.String */
-    //.regexp    { color: rgba(244,156,0,1) } /* Literal.String.Regex */
-    //.symbol    { color: rgba(157,100,255,1) } /* Literal.String.Symbol */
-    //.escape-sequence { color: rgba(165,115,255,1) } /* Escape Sequence */
-
+    .comment   { color: rgba(130,130,110,1) }//font-style: italic }        /* Comment */
     .red      { color: rgba(240,30,100,1) }
     .sky-blue { color: rgba(90,220,250,1) }
+    .skyblue { color: rgba(90,220,250,1) }
     .purple   { color: rgba(175,125,255,1) }
     .green    { color: rgba(130,230,0,1) }
     .yellow   { color: rgba(220,220,100,1) }
@@ -821,7 +807,7 @@ pre {
 }
 
 main {
-  margin-left: 12em;
+  margin-left: 13em;
   //min-width: 600px;
   //max-width: 800px;
   // margin-right: -80px;
@@ -837,8 +823,8 @@ main {
 aside {
   float: left;
   position: fixed;
-  width: 10em;
-  margin-top: 1em;
+  width: 11em;
+  margin-top: 0.95em;
   white-space: nowrap;
   overflow: hidden;
   .not-fixed {

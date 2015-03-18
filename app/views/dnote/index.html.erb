@@ -1,9 +1,9 @@
 
 <aside>
   <% if @navigate_tags %>
-    <%= link_to 'Home', tex2e_path %><br>
+    <%= link_to 'Home', dnote_path %><br>
     <% @navigate_tags.each do |tag| %>
-      └ <%= link_to tag, tex2e_path(tag: tag) %><br>
+      └ <%= link_to tag, dnote_path(tag: tag) %><br>
     <% end %>
   <% end %>
 </aside>
@@ -20,7 +20,7 @@
         <%= "#{post.date} " if post.date && post.date != "" %>
       </span>
       <span class="title">
-        <%= link_to post.title, show_tex2e_path(post) %>
+        <%= link_to post.title, show_dnote_path(post) %>
       </span>
       <span class="tag">
         <%= " - #{post.tag}" if post.tag && post.tag != "" %>
