@@ -32,7 +32,7 @@ $(document).ready ->
 
 # 主にソースコード
 bright_mode = [
-	"ruby", "c", "cpp", "csharp", "java", "js", "html", "css", "php", "python"
+	"ruby", "c", "cpp", "csharp", "java", "js", "coffee", "html", "css", "php", "python"
 ]
 
 # 主に出力結果
@@ -83,7 +83,7 @@ class window.SplitToken
 		return { type:"Str",	text:RegExp.$1 } if /^('(?:[^\\'\n]*|\\.)*')/.test code # 'str'
 		return { type:"Str",	text:RegExp.$1 } if /^("(?:[^\\"\n]*|\\.)*")/.test code # "str"
 		return { type:"Reg",	text:RegExp.$1 } if ///^(
-				[=([,]\s? \/(?:[^\\/]+|\\.)*\/[gimx]*) (?=[\s,)\];]
+				(?:[=\(\[,])\s? \/ (?:[^\\/\n]+|\\.)* \/ [gimx]* \s?(?![\w\/])
 			)///.test code # /regexp/
 		return { type:"Num",	text:RegExp.$1 } if /^(0x?[\da-f]+)/i.test code # 0xfff
 		return { type:"Num",	text:RegExp.$1 } if /^(\.?\d+\.?(?:\d+)?(?:e[-+]\d+)?)/i.test code # 12.34e+5
@@ -99,7 +99,7 @@ class window.SplitToken
 		return { type:"Ident",	text:RegExp.$1 } if /^(\w+)/.test code
 		return { type:"UnIdent",text:RegExp.$1 } if /^(.)/.test code
 		return { type:"EOF",	text:RegExp.$1 } if /^()$/.test code
-		return { type:"EOF",	text:"Error"   }
+		return { type:"EOF",	text:"Error"   } 
 
 ## Ruby
 class window.SplitRubyToken extends SplitToken
@@ -187,7 +187,25 @@ class window.SplitJavaScriptToken extends SplitToken
 			)\b///.test code
 		super code
 
-
+## CoffeeScript
+class window.SplitCoffeeScriptToken extends SplitToken
+	take_token: (code)->
+		return { type:"Comment",	text:RegExp.$1 } if /^(#.*)/.test code # // comment
+		return { type:"Comment",	text:RegExp.$1 } if /^(###(?:[^#]+|#(?!##))###)/.test code # /* comment */
+		return { type:"Keyword",	text:RegExp.$1 } if ///^(
+				if|unless|else|for|in|of|while|until|break|continue|do|loop
+				|return|switch|when|then|try|catch|finally|throw|by|super
+			)\b///.test code
+		return { type:"Reg",		text:RegExp.$1 } if ///^(
+				\/ (?:[^\\/\n]+|\\.)+ \/ [gimx]{0,4} (?!\w)(?!\s\w)
+			)///.test code # / regexp /
+		return { type:"RegMul",		text:RegExp.$1 } if ///^(
+				\/\/\/ (?:[^\\/]+|\\.)+ \/\/\/ [gimx]{0,4}
+			)///.test code # /// regexp ///
+		return { type:"DefFunc",	text:RegExp.$1 } if /^(-&gt;)/.test code # ->
+		return { type:"DefClass",	text:RegExp.$1 } if /^(class\s[^\s]+(?:\sextends\s[^\s]+)?)/.test code # RegExp.$1
+		return { type:"RegExp$",	text:RegExp.$1 } if /^(\$\d)/.test code # RegExp.$1
+		super code
 
 
 
