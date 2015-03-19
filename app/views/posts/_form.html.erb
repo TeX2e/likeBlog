@@ -19,11 +19,11 @@
     </div>
     <div class="field">
       <%= f.label :title %>
-      <%= f.text_field :title %>
+      <%= f.text_field :title, {size: 64, maxlength: 32} %>
     </div>
     <div class="field">
       <%= f.label :tag %>
-      <%= f.text_field :tag %>
+      <%= f.text_field :tag, {size: 64} %>
     </div>
     <div class="field">
       <%= f.label :text %><br>

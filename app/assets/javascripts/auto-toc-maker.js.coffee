@@ -27,7 +27,7 @@ $(document).ready ->
 		for i in [level..6]
 			sectionNumbers[i] = 0
 
-		sectionNumber = sectionNumbers.slice(1,level).join(".")
+		sectionNumber = sectionNumbers.slice(1,level).join(".") + "."
 
 		span = document.createElement('span')
 		span.className = "TOCSectNum"

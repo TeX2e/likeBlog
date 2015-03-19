@@ -51,13 +51,13 @@ $(document).ready ->
 $(document).ready ->
 	for type in bright_mode
 		$("div.markdown-body pre.#{type}").each ->
-			$(this).css("color", "rgba(250,250,250,1)")
+			$(this).css("color", "rgba(240,240,240,1)")
 			$(this).css("background-color", "rgba(40,40,40,1)")
 
 	for type in more_bright_mode
 		$("div.markdown-body pre.#{type}").each ->
-			$(this).css("color", "rgba(250,250,250,1)")
-			$(this).css("background-color", "rgba(35,35,35,1)")
+			$(this).css("color", "rgba(240,240,240,1)")
+			$(this).css("background-color", "rgba(40,40,40,1)")
 
 
 class window.SplitToken

@@ -16,14 +16,14 @@
 
   <% @posts.reverse_each do |post| %>
     <div class="post-list">
-      <span class="date">
-        <%= "#{post.date} " if post.date && post.date != "" %>
-      </span>
       <span class="title">
         <%= link_to post.title, show_dnote_path(post) %>
       </span>
       <span class="tag">
         <%= " - #{post.tag}" if post.tag && post.tag != "" %>
+      </span>
+      <span class="date">
+        <%= "#{post.date} " if post.date && post.date != "" %>
       </span>
       <hr>
     </div>

@@ -3,7 +3,7 @@
   <% tag = @post.tag if @post %>
   <% tag ||= "" %>
   <%= link_to 'Home', dnote_path %> <br>
-  └ <%= link_to tag, dnote_path(tag: tag) %>
+  └ <%= link_to tag, dnote_path(tag: tag) %> <br>
   <hr>
   <div id="TOC"></div>
 </aside>

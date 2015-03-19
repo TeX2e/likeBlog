@@ -6,10 +6,11 @@ class PostsController < ApplicationController
   # GET /posts.json
   def index
     @navigate_tags = []
-    Post.select("tag").uniq.each do |recode|
+    Post.select("tag").each do |recode|
       @navigate_tags << recode.tag
     end
-    @navigate_tags.reject!(&:blank?).sort_by! { |tag| tag.downcase }
+    @navigate_tags.uniq!.reject!(&:blank?)
+    @navigate_tags.sort_by! { |tag| tag.downcase }
     
     tag = params[:tag]
     if tag

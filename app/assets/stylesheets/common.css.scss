@@ -451,12 +451,13 @@ pre {
     font-size: 1.75em;
     line-height: 1.2;
     //border-bottom: 1px solid #eee;
-    text-align: center;
+    // text-align: center;
   }
   h1 .anchor {
     line-height: 1;
   }
   h2 {
+    padding-top: 1em;
     padding-bottom: 0.3em;
     font-size: 1.5em;
     line-height: 1.225;
@@ -766,7 +767,7 @@ pre {
   }
 } @else if $color_scheme == bright {
   .codehilite {
-    .comment  { color: rgba(130,130,110,1) }//font-style: italic }        /* Comment */
+    .comment  { color: rgba(150,150,130,1) }//font-style: italic }        /* Comment */
     .red      { color: rgba(240,30,100,1) }
     .sky-blue { color: rgba(90,220,250,1) }
     .skyblue  { color: rgba(90,220,250,1) }
@@ -847,12 +848,13 @@ div.post-list {
   clear: both;
   font-size: 120%;
   > .date {
-    margin-right: 1em;
+    float: right;
   }
   > .title {
+    margin-left: 1em;
   }
   > .tag {
-    float: right;
+    // float: right;
     color: #999;
     font-size: 90%;
   }
