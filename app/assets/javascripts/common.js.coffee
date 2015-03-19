@@ -83,7 +83,7 @@ class window.SplitToken
 		return { type:"Str",	text:RegExp.$1 } if /^('(?:[^\\'\n]*|\\.)*')/.test code # 'str'
 		return { type:"Str",	text:RegExp.$1 } if /^("(?:[^\\"\n]*|\\.)*")/.test code # "str"
 		return { type:"Reg",	text:RegExp.$1 } if ///^(
-				(?:[=\(\[,])\s? \/ (?:[^\\/\n]+|\\.)* \/ [gimx]* \s?(?![\w\/])
+				(?:[=\(\[,])\s? \/ (?:[^\\/]+|\\.)* \/ [gimx]* (?=[\s,\)\].])
 			)///.test code # /regexp/
 		return { type:"Num",	text:RegExp.$1 } if /^(0x?[\da-f]+)/i.test code # 0xfff
 		return { type:"Num",	text:RegExp.$1 } if /^(\.?\d+\.?(?:\d+)?(?:e[-+]\d+)?)/i.test code # 12.34e+5
@@ -194,7 +194,7 @@ class window.SplitCoffeeScriptToken extends SplitToken
 		return { type:"Comment",	text:RegExp.$1 } if /^(###(?:[^#]+|#(?!##))###)/.test code # /* comment */
 		return { type:"Keyword",	text:RegExp.$1 } if ///^(
 				if|unless|else|for|in|of|while|until|break|continue|do|loop
-				|return|switch|when|then|try|catch|finally|throw|by|super
+				|return|new|switch|when|then|try|catch|finally|throw|by|super
 			)\b///.test code
 		return { type:"Reg",		text:RegExp.$1 } if ///^(
 				\/ (?:[^\\/\n]+|\\.)+ \/ [gimx]{0,4} (?!\w)(?!\s\w)
@@ -202,11 +202,11 @@ class window.SplitCoffeeScriptToken extends SplitToken
 		return { type:"RegMul",		text:RegExp.$1 } if ///^(
 				\/\/\/ (?:[^\\/]+|\\.)+ \/\/\/ [gimx]{0,4}
 			)///.test code # /// regexp ///
-		return { type:"DefFunc",	text:RegExp.$1 } if /^(-&gt;)/.test code # ->
+		return { type:"Func",		text:RegExp.$1 } if /^(-&gt;)/.test code # ->
+		return { type:"DefFunc",	text:RegExp.$1 } if /^(\w+\s?[=:]\s?(?:\([\w\s@,]+\)\s?)?-&gt;)/.test code # ->
 		return { type:"DefClass",	text:RegExp.$1 } if /^(class\s[^\s]+(?:\sextends\s[^\s]+)?)/.test code # RegExp.$1
 		return { type:"RegExp$",	text:RegExp.$1 } if /^(\$\d)/.test code # RegExp.$1
 		super code
-
 
 
 

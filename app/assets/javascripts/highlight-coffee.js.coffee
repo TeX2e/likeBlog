@@ -20,17 +20,24 @@ $(document).ready ->
 				switch type
 					when "Comment" 	then "<span class=\"comment\">#{text}</span>"
 					when "Str" 		then "<span class=\"yellow\">#{text}</span>"
-					# when "Reg"
-					# 	match = ///^([=\(\[,]\s?) ((\/\/\/|\/) (?:[^\\/]+|\\.)* \3 [gimx]*)///.exec text
-					# 	before = match[1]
-					# 	text   = match[2]
-					# 	before = "<span class=\"red\">#{RegExp.$1}</span>" if /^(=\s?)/.test before
-					# 	"#{before}<span class=\"orange\">#{text}</span>"
 					when "Reg", "RegMul"		then "<span class=\"orange\">#{text}</span>"
 					when "Num", "Sym", "Flag" 	then "<span class=\"purple\">#{text}</span>"
 					when "Keyword", "Ope"		then "<span class=\"red\">#{text}</span>"
-					when "DefFunc" 				then "<span class=\"skyblue\">#{text}</span>"
+					when "Func" 				then "<span class=\"skyblue\">#{text}</span>"
 					when "Const" 				then "<span class=\"skyblue\">#{text}</span>"
+					when "DefClass"
+						match = ///^class\s([^\s]+)(?:\s(extends)\s([^\s]+))?///.exec text
+						className        = "<span class=\"red\">#{match[1]}</span>"
+						extendsKeyword   = if match[2] then " <span class=\"red\">#{match[2]}</span>"   else ""
+						extendsClassName = if match[2] then " <span class=\"green\">#{match[3]}</span>" else ""
+						"<span class=\"skyblue\">class</span> #{className}#{extendsKeyword}#{extendsClassName}"
+					when "DefFunc"
+						match = ///^(\w+) (\s?[=:]\s?) (?:(\([\w\s@,]+\)))?(\s?-&gt;)///.exec text
+						func_name  = "<span class=\"green\">#{match[1]}</span>"
+						assignment = "<span class=\"red\">#{match[2]}</span>"
+						func_args  = if match[3] then "<span class=\"orange\">#{match[3]}</span>" else ""
+						func_arrow = "<span class=\"skyblue\">#{match[4]}</span>"
+						"#{func_name}#{assignment}#{func_args}#{func_arrow}"
 			tokens_tmp.push( {
 				type: type,
 				text: highlight_text || text
