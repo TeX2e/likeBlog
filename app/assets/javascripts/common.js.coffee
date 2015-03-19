@@ -82,9 +82,8 @@ class window.SplitToken
 		return { type:"Func",	text:RegExp.$1 } if /^(\w+)(?=\()/.test code # func_name()
 		return { type:"Str",	text:RegExp.$1 } if /^('(?:[^\\'\n]*|\\.)*')/.test code # 'str'
 		return { type:"Str",	text:RegExp.$1 } if /^("(?:[^\\"\n]*|\\.)*")/.test code # "str"
-		return { type:"Tag",	text:RegExp.$1 } if /^(&lt;[^&\n]+&gt;)/.test code # <stdio.h>
 		return { type:"Reg",	text:RegExp.$1 } if ///^(
-				[=([,]\s? \/(?:[^\\/]+|\\.)*\/[gimx]*) (?=[\s,)\]]
+				[=([,]\s? \/(?:[^\\/]+|\\.)*\/[gimx]*) (?=[\s,)\];]
 			)///.test code # /regexp/
 		return { type:"Num",	text:RegExp.$1 } if /^(0x?[\da-f]+)/i.test code # 0xfff
 		return { type:"Num",	text:RegExp.$1 } if /^(\.?\d+\.?(?:\d+)?(?:e[-+]\d+)?)/i.test code # 12.34e+5
@@ -112,11 +111,11 @@ class window.SplitRubyToken extends SplitToken
 				end|do|if|unless|elsif|else|for|while|until|return|require
 				|class|module|public|protected|attr_(?:writer|reader|accessor)
 				|case|when|begin|rescue
-			)\b///.test code # func_name()
-		return { type:"Num",	text:RegExp.$1 } if /^(\d[\d_]*)/.test code # 10_000
+			)\b///.test code
+		return { type:"Num",	text:RegExp.$1 } if /^(\d[\d_]*\.?\d*)/.test code # 10_000
 		return { type:"Range",	text:RegExp.$1 } if /^(\.\.\.?)/.test code # 10_000
 		return { type:"Sym",	text:RegExp.$1 } if /^(:\w+|\w+:)(?!:)/.test code # :symbol
-		return { type:"Chain",	text:RegExp.$1 } if /^(\.|::)/.test code # :symbol
+		return { type:"Chain",	text:RegExp.$1 } if /^(\.|::)/.test code # Array::Module.method
 		super code
 
 ## C
@@ -131,6 +130,7 @@ class window.SplitCToken extends SplitToken
 				if|else|for|while|return|break|continue|include|sizeof|switch|case
 			)\b///.test code
 		return { type:"Def",		text:RegExp.$1 } if /^(define)/.test code
+		return { type:"Tag",	text:RegExp.$1 } if /^(&lt;[^&\n]+&gt;)/.test code # <stdio.h>
 		super code
 
 ## HTML
@@ -172,7 +172,20 @@ class window.SplitCSSToken extends SplitToken
 		return { type:"Variable",	text:RegExp.$1 } if /^(\$\w+)/.test code # @if
 		super code
 
-
+## JavaScript
+class window.SplitJavaScriptToken extends SplitToken
+	take_token: (code)->
+		return { type:"Comment",	text:RegExp.$1 } if /^(\/\/.*)/.test code # // comment
+		return { type:"Comment",	text:RegExp.$1 } if /^(\/\*(?:[^*]+|\*[^\/])*\*\/)/.test code # /* comment */
+		return { type:"Def",		text:RegExp.$1 } if /^(function)\b/.test code # function
+		return { type:"Chain",		text:RegExp.$1 } if /^(\.)/.test code # document.method
+		return { type:"InitKeyword",text:RegExp.$1 } if /^(var)\b/.test code
+		return { type:"Keyword",	text:RegExp.$1 } if ///^(
+				if|else|for|while|return|break|continue|switch|case
+				|do|try|catch|finally|throws|default
+				|new|typeof|in|instanceof|delete|with
+			)\b///.test code
+		super code
 
 
 

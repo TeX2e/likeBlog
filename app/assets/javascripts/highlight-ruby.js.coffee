@@ -21,7 +21,7 @@ $(document).ready ->
 						match = ///^([=\(\[,]\s?)(\/(?:[^\\/]+|\\.)*\/[gimx]*)///.exec text
 						before = match[1]
 						text   = match[2]
-						# before = "<span class=\"red\">#{RegExp.$1}</span>" if /^(=\s?)/.test before
+						before = "<span class=\"red\">#{RegExp.$1}</span>" if /^(=\s?)/.test before
 						"#{before}<span class=\"orange\">#{text}</span>"
 					when "Num", "Sym", "Flag" 	then "<span class=\"purple\">#{text}</span>"
 					when "Keyword", "Def" 		then "<span class=\"red\">#{text}</span>"
